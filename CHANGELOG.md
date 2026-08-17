@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0] - 2026-08-17
+
+### Added
+
+- 平行宇宙策略竞标（strategy-selector）：候选决策策略池（gap/topk × 10）+ 重演度量 + Pareto 选优——大脑的军令参数不再人挑。
+- branch-search-experiment（E19）：四实验（候选竞标 / 留出批对照 / 真分支宇宙交叉验证 / 门槛扫描）。
+
 ## [0.4.0] - 2026-08-17
 
 ### Added
