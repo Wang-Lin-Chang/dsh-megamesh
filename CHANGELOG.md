@@ -1,0 +1,19 @@
+# Changelog
+
+## [0.1.0] - 2026-08-17
+
+### Added
+
+- 统一入口 megamesh：战场（任务/租约/收养）+ 战报 + 军法 + 任期 + 时间线 + 人机共读 + 混沌，一栈式。
+- 七个实测模块融合：mesh-core / war-law（+ 提取器）/ federal-brain / brain-tier / scout-worker（+ tier 版）/ time-machine / clerk-worker。
+- 全文冷引用（digest 寻址 + 主宇宙回源）与瞬态协议区快照排除。
+- witness 生命周期对接（五态 + EXIT 协议）；叙事 14 类不变量 kind 化并入军法（一法通万物）。
+- 各大厂适配：5 函数契约 + LangGraph.js v1.4.10 真库实测 + CrewAI 1.15.16 真库实测（本地 mock LLM）。
+- 15 个实验装置（E01–E15，含发布前总检 preflight）；hello-megamesh 一条命令起全军。
+- 模块级单测（node --test，28 断言覆盖 6 模块）。
+- 三平台 CI（windows/macos/ubuntu）。
+
+### Fixed
+
+- sweep 假阳性诊断链：release 5 次忙等重试 + "任务已完成的锁残留"分类 + TOCTOU 跳过（v0.3.0 发布前的自检发现，已同步 dsh-mesh v0.3.1）。
+- time-machine 瞬态区排除的路径分隔符归一化（Windows 反斜杠 vs 比较用正斜杠——单测抓出）。

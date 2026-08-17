@@ -29,7 +29,11 @@ export class TimeMachine {
     fs.mkdirSync(dest, { recursive: true })
     const manifest = { at: Date.now(), mode, files: 0, skipped: [], pass2Added: 0 }
     // 瞬态协议区不入账本快照：expand-reqs/expand-resps 是易失交换区，入快照会把陈旧回执带进分支宇宙（跨宇宙状态泄漏）
-    const isTransient = (relDir) => relDir === 'shared/expand-reqs' || relDir === 'shared/expand-resps'
+    // 路径分隔符归一化：Windows path.join 用反斜杠，比较必须归一
+    const isTransient = (relDir) => {
+      const n = relDir.split(path.sep).join('/')
+      return n === 'shared/expand-reqs' || n === 'shared/expand-resps'
+    }
     const copyAll = async () => {
       for (const dir of SNAPSHOT_DIRS) {
         const srcDir = path.join(this.root, dir)
