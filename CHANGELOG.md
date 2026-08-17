@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.0] - 2026-08-17
+
+### Added
+
+- 影子法庭（shadow-law）：候选规则影子运行（只记录不拦截）+ Wilson 统计转正判据 + promote/demote 可回退闭环——自治军法的边界。
+- shadow-experiment（E16）：五实验（影子零干预 / Wilson 判据扫描 / 固定影子期对照 / promote-demote 闭环 / 坏规则安全阀）。
+- megamesh 统一入口挂载 shadowCourt()。
+
 ## [0.1.0] - 2026-08-17
 
 ### Added

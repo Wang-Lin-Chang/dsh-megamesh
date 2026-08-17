@@ -11,6 +11,7 @@ import { violations } from './war-law-engine.mjs'
 import { render as renderHuman, verify as verifyHuman } from './clerk-worker.mjs'
 import { recordExit, deriveState, exitCode } from './lifecycle.mjs'
 import { courtStory } from './universal-law.mjs'
+import { ShadowCourt } from './shadow-law.mjs'
 import { spawn } from 'node:child_process'
 import { createHash } from 'node:crypto'
 import * as fs from 'node:fs'
@@ -53,6 +54,9 @@ export class MegaMesh {
   lawCourt(report, rules = this.rules) { return violations(rules, report) }
   // 一法通万物：同一入口审叙事域（14 类叙事不变量，规则是数据）
   lawCourtStory(db, opts = {}) { return courtStory(db, undefined, opts) }
+
+  // 影子法庭：自治军法的边界（Wilson 转正判据 + promote/demote 可回退）
+  shadowCourt() { return new ShadowCourt(this.root) }
 
   // ---------- 任期（联邦） ----------
   term() {

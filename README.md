@@ -7,7 +7,7 @@
 [![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](./LICENSE)
 [![ci](https://github.com/Wang-Lin-Chang/dsh-megamesh/actions/workflows/ci.yml/badge.svg)](https://github.com/Wang-Lin-Chang/dsh-megamesh/actions/workflows/ci.yml)
 
-**每个声称带实验编号**：`experiments/` 下 15 个实验装置（E01–E15），全部真进程实测，对照组说话。
+**每个声称带实验编号**：`experiments/` 下 16 个实验装置（E01–E16），全部真进程实测，对照组说话。
 
 ## 实验编目 / Experiment index
 
@@ -28,6 +28,7 @@
 | E13 | mesh-test | CI 核心断言（9 项）|
 | E14 | forensic-sweep | 收养取证（sweep 时刻锁态）|
 | E15 | preflight-experiment | 发布前总检（词检/依赖图/声称核对/清单）|
+| E16 | shadow-experiment | 影子法庭：Wilson 转正判据 + promote/demote 闭环 |
 
 ## 一条命令起全军 / One command, one army
 
@@ -48,7 +49,7 @@ node hello-megamesh.mjs
 | 规则腐烂、伪造战报 | 军法（规则是数据）+ 免疫系统（自动提取 + 纠错杀）| 假阳性 8→0，假阴性 2→0，3 条人类没写过的规则（E05）|
 | 不可复现、不可审计 | 时间战场：checkpoint/branch/checkout/diff/merge | 重演 90/90 逐份一致，三向合并冲突留双档（E06）|
 
-另：人机共读战报（Markdown 人读区 + JSON 机器区同一文件，双区矛盾必被抓，E07）· witness 五态生命周期 + EXIT 协议（E09）· 叙事域 14 类不变量并入同一法庭，一法通万物（E10）· 混沌引擎每日随机 kill 自己并自愈（杀兵 744 ms / 杀主席 1636 ms，E08）。
+另：人机共读战报（Markdown 人读区 + JSON 机器区同一文件，双区矛盾必被抓，E07）· witness 五态生命周期 + EXIT 协议（E09）· 叙事域 14 类不变量并入同一法庭，一法通万物（E10）· 混沌引擎每日随机 kill 自己并自愈（杀兵 744 ms / 杀主席 1636 ms，E08）· 影子法庭（Wilson 统计转正判据 + promote/demote 可回退——自治军法的边界，E16）。
 
 ## 架构 / Architecture
 
@@ -96,7 +97,7 @@ node experiments/fusion-experiment.mjs                 # 融合总验（统一�
 - **单机共享文件系统**：跨机器需共享磁盘 + 网络文件系统，未实测不声称。
 - **at-least-once 派发**：崩溃窗口可能重复处理，幂等性由任务自身保证。
 - **崩溃容错换脑 ≠ 拜占庭容错**：无签名、无 2/3 背书；拜占庭容错是下一个台阶，不冒认。
-- **自动提取的军法规则是草案**：过画像集 + 留出集两道零误杀自检后仍需人工批准，自动提取不自动生效。
+- **自动提取的军法规则是草案**：过画像集 + 留出集两道零误杀自检后仍需人工批准，自动提取不自动生效；影子法庭（`shadow-law.mjs`）提供统计转正路径——Wilson 判据达标自动转正，转正后误杀申诉即回退（promote/demote 闭环）。
 - **快照覆盖账本层**：全文层通过 digest 冷引用主宇宙库；瞬态协议区（expand-*）不入快照，分支宇宙展开需重新请求。
 - **侦察兵进程未升级 EXIT 写入**：统一入口 `finish` 必留 EXIT:0，侦察兵直连 mesh 的完成记录无 EXIT（已列为 TODO，不藏）。
 - **CrewAI 实测的 LLM 是本地脚本化的**：crew 编排层（agents/tasks/context/串行 kickoff）真库真执行，LLM 大脑为脚本响应；接真实 LLM 端点未实测不声称。
