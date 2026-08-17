@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url'
 
 const HERE = path.dirname(fileURLToPath(import.meta.url))
 const [rootArg] = process.argv.slice(2)
-const root = path.resolve(rootArg ?? path.join(HERE, '..'))
+const root = path.resolve(rootArg ?? HERE)   // 默认 = 脚本所在项目根（HERE 已是根，勿再加 ..）
 
 // 关 1：词检（全发布树，词表=数据）
 const BAD = new RegExp(JSON.parse(fs.readFileSync(path.join(HERE, 'lab', 'bad-words.json'), 'utf-8')).join('|'))
