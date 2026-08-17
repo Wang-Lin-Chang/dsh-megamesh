@@ -1,17 +1,11 @@
 {
   "by": "audit-army",
-  "at": 1786980198779,
-  "N": 4,
+  "at": 1786982844853,
+  "N": 1,
   "repos": 12,
   "tasks": 48,
-  "elapsedMs": 32246,
-  "passed": 47,
-  "failed": 1,
-  "fails": [
-    {
-      "repo": "dsh-megamesh",
-      "check": "drift",
-      "evidence": "audit-army.mjs(only-local);audit-scout.mjs(only-local);crosscheck-brain.mjs(only-local)"
-    }
-  ]
+  "elapsedMs": 72743,
+  "passed": 48,
+  "failed": 0,
+  "fails": []
 }

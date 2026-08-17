@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.13.0] - 2026-08-17
+
+### Added
+
+- 并行惩罚感知调度（E26）：惩罚系数 α 由 6 档兵数真实采集拟合（中位数，非拍脑袋）——老模型 N=2..8 makespan 全部平局（对并行惩罚零感知的盲区实测），新模型惩罚项让代价单调可见、选择唯一有据。
+- 审计军（audit-army + audit-scout，E27）：多 Agent 并行跨仓库体检（12 仓库 × 4 关 = 48 任务），接替手写串行审计——上岗即拦截真实信号（CI 红 + 推送后本地再改的漂移）+ 埋雷真拦截验证。
+- 联邦脑多方质证（crosscheck-brain，E28）：chair 提议（max severity）+ 自洽/离群双质证独立表决——取最优模式两次被假阳性劫持，质证全部拦截；真阳性不被误杀（MAD 稳健检测受控）。vetoed/contested-high-risk 时 decree 不放行，分歧记录落盘。
+
+### Fixed
+
+- 联邦脑质证升级后 schema 兼容回归：部署域战报无 keyNumbers 时质证跳过矛盾/离群检查，全票放行。
+- 审计军口径修正：词检/漂移跳过运行时账本目录（shared）；npm scoped 包名映射（dsh-story/schedule-core 查 scoped 包）；平台后端库无 npm 包 = 设计事实不误报。
+
 ## [0.12.1] - 2026-08-17
 
 ### Fixed

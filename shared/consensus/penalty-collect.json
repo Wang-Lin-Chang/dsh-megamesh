@@ -1,271 +1,271 @@
 {
   "1": {
-    "wallMs": 254007,
+    "wallMs": 252721,
     "rows": [
       {
         "exp": "real-autopublish-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 143286
+        "elapsedMs": 144089
       },
       {
         "exp": "time-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 53032
+        "elapsedMs": 53037
       },
       {
         "exp": "real-adapter-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 16536
-      },
-      {
-        "exp": "mesh-experiment.mjs",
-        "exit": 0,
-        "elapsedMs": 10743
+        "elapsedMs": 17863
       },
       {
         "exp": "federation-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 11528
+        "elapsedMs": 11209
+      },
+      {
+        "exp": "mesh-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 10809
       },
       {
         "exp": "deploy-army-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 10221
-      },
-      {
-        "exp": "real-deploy-experiment.mjs",
-        "exit": 0,
-        "elapsedMs": 3777
+        "elapsedMs": 6528
       },
       {
         "exp": "fusion-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 4790
+        "elapsedMs": 5438
+      },
+      {
+        "exp": "tier-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 3649
       }
     ]
   },
   "2": {
-    "wallMs": 143621,
+    "wallMs": 144425,
     "rows": [
       {
         "exp": "real-autopublish-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 143545
+        "elapsedMs": 144351
       },
       {
         "exp": "time-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 56998
+        "elapsedMs": 61822
       },
       {
         "exp": "real-adapter-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 17747
-      },
-      {
-        "exp": "mesh-experiment.mjs",
-        "exit": 0,
-        "elapsedMs": 10741
+        "elapsedMs": 19418
       },
       {
         "exp": "federation-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 11021
+        "elapsedMs": 11401
+      },
+      {
+        "exp": "mesh-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 10780
       },
       {
         "exp": "deploy-army-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 10209
-      },
-      {
-        "exp": "real-deploy-experiment.mjs",
-        "exit": 0,
-        "elapsedMs": 3820
+        "elapsedMs": 6552
       },
       {
         "exp": "fusion-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 4780
+        "elapsedMs": 5679
+      },
+      {
+        "exp": "tier-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 3806
       }
     ]
   },
   "3": {
-    "wallMs": 100406,
+    "wallMs": 145946,
     "rows": [
       {
         "exp": "real-autopublish-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 100324
+        "elapsedMs": 145870
       },
       {
         "exp": "time-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 63850
+        "elapsedMs": 68733
       },
       {
         "exp": "real-adapter-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 23356
-      },
-      {
-        "exp": "mesh-experiment.mjs",
-        "exit": 0,
-        "elapsedMs": 10834
+        "elapsedMs": 21272
       },
       {
         "exp": "federation-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 11155
+        "elapsedMs": 11618
+      },
+      {
+        "exp": "mesh-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 10974
       },
       {
         "exp": "deploy-army-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 12136
-      },
-      {
-        "exp": "real-deploy-experiment.mjs",
-        "exit": 0,
-        "elapsedMs": 5061
+        "elapsedMs": 7383
       },
       {
         "exp": "fusion-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 4992
+        "elapsedMs": 5895
+      },
+      {
+        "exp": "tier-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 4585
       }
     ]
   },
   "4": {
-    "wallMs": 145694,
+    "wallMs": 146956,
     "rows": [
       {
         "exp": "real-autopublish-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 145616
+        "elapsedMs": 146867
       },
       {
         "exp": "time-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 65915
+        "elapsedMs": 65978
       },
       {
         "exp": "real-adapter-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 20768
-      },
-      {
-        "exp": "real-deploy-experiment.mjs",
-        "exit": 0,
-        "elapsedMs": 5858
-      },
-      {
-        "exp": "mesh-experiment.mjs",
-        "exit": 0,
-        "elapsedMs": 11032
-      },
-      {
-        "exp": "federation-experiment.mjs",
-        "exit": 0,
-        "elapsedMs": 11427
+        "elapsedMs": 22199
       },
       {
         "exp": "deploy-army-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 13170
+        "elapsedMs": 9240
+      },
+      {
+        "exp": "federation-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 12429
+      },
+      {
+        "exp": "mesh-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 11332
       },
       {
         "exp": "fusion-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 6038
+        "elapsedMs": 6119
+      },
+      {
+        "exp": "tier-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 4823
       }
     ]
   },
   "6": {
-    "wallMs": 88021,
+    "wallMs": 149512,
     "rows": [
       {
         "exp": "real-autopublish-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 87943
+        "elapsedMs": 149433
       },
       {
         "exp": "time-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 67241
+        "elapsedMs": 66221
       },
       {
         "exp": "real-adapter-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 26062
-      },
-      {
-        "exp": "mesh-experiment.mjs",
-        "exit": 0,
-        "elapsedMs": 11426
+        "elapsedMs": 27921
       },
       {
         "exp": "federation-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 12998
+        "elapsedMs": 11749
       },
       {
-        "exp": "fusion-experiment.mjs",
+        "exp": "mesh-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 8118
+        "elapsedMs": 11500
+      },
+      {
+        "exp": "tier-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 5413
       },
       {
         "exp": "deploy-army-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 16159
+        "elapsedMs": 9472
       },
       {
-        "exp": "real-deploy-experiment.mjs",
+        "exp": "fusion-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 6388
+        "elapsedMs": 7038
       }
     ]
   },
   "8": {
-    "wallMs": 150976,
+    "wallMs": 149942,
     "rows": [
       {
         "exp": "real-autopublish-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 150893
+        "elapsedMs": 149858
       },
       {
         "exp": "time-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 67347
+        "elapsedMs": 65594
       },
       {
         "exp": "real-adapter-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 25967
-      },
-      {
-        "exp": "mesh-experiment.mjs",
-        "exit": 0,
-        "elapsedMs": 11797
+        "elapsedMs": 23509
       },
       {
         "exp": "federation-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 12729
+        "elapsedMs": 13469
+      },
+      {
+        "exp": "mesh-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 11593
       },
       {
         "exp": "deploy-army-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 17364
-      },
-      {
-        "exp": "real-deploy-experiment.mjs",
-        "exit": 0,
-        "elapsedMs": 7694
+        "elapsedMs": 10500
       },
       {
         "exp": "fusion-experiment.mjs",
         "exit": 0,
-        "elapsedMs": 8481
+        "elapsedMs": 8672
+      },
+      {
+        "exp": "tier-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 6182
       }
     ]
   }

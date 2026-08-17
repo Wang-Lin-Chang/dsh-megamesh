@@ -29,7 +29,7 @@ let auditElapsed = 0
   auditElapsed = last.elapsedMs
   auditOk = last.failed === 0
   say(last.failed === 0
-    ? C.green + `   ✓ 审计军全绿：${last.passed}/${last.tasks} 体检项通过 · ${(last.elapsedMs / 1000).toFixed(1)}s（${last.scouts} 侦察兵并行）` + C.reset
+    ? C.green + `   ✓ 审计军全绿：${last.passed}/${last.tasks} 体检项通过 · ${(last.elapsedMs / 1000).toFixed(1)}s（${last.N ?? last.scouts ?? '?'} 侦察兵并行）` + C.reset
     : C.red + `   ✗ 审计军抓到 ${last.failed} 个问题：` + C.reset + (last.fails ?? []).map(f => `${f.repo}/${f.check}`).join(', '))
   if (last.failed > 0) say(C.dim + '   （下面 EXP-3 埋雷前先看这些是真实债还是审计军误报——装置事实优先）' + C.reset)
 }

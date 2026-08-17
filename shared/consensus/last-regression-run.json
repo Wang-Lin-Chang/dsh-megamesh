@@ -1,12 +1,9 @@
 {
   "by": "regression-army",
-  "at": 1786979889362,
+  "at": 1786982419281,
   "N": 2,
   "batches": 2,
-  "elapsedMs": 224339,
-  "allPassed": false,
-  "failing": [
-    "preflight-experiment.mjs:exit1",
-    "audit-army-experiment.mjs:exit1"
-  ]
+  "elapsedMs": 144401,
+  "allPassed": true,
+  "failing": []
 }
