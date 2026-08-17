@@ -22,7 +22,7 @@ log(`started pid=${process.pid} shard=${shardSpec}`)
 function runCheck(check, projectRoot) {
   if (check === 'words') {
     const BAD = new RegExp(JSON.parse(fs.readFileSync(path.join(HERE, 'lab', 'bad-words.json'), 'utf-8')).join('|'))
-    const SKIP = new Set(['node_modules', '.git', 'lab'])
+    const SKIP = new Set(['node_modules', '.git', 'lab', 'shared'])   // shared=运行时账本/证据目录，非发布树
     const hits = []
     const walk = (d) => {
       for (const e of fs.readdirSync(d, { withFileTypes: true })) {

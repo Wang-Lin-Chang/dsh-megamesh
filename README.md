@@ -7,7 +7,7 @@
 [![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](./LICENSE)
 [![ci](https://github.com/Wang-Lin-Chang/dsh-megamesh/actions/workflows/ci.yml/badge.svg)](https://github.com/Wang-Lin-Chang/dsh-megamesh/actions/workflows/ci.yml)
 
-**每个声称带实验编号**：`experiments/` 下 25 个实验装置（E01–E25），全部真进程实测，对照组说话。
+**每个声称带实验编号**：`experiments/` 下 28 个实验装置（E01–E28），全部真进程实测，对照组说话。
 
 ## 实验编目 / Experiment index
 
@@ -38,6 +38,9 @@
 | E23 | tech-debt-audit | 技术债审计：程序化债单（每项债带证据）|
 | E24 | deploy-army-experiment | 部署军对照：多 Agent 并行三关 vs 单进程顺序 |
 | E25 | regression-army-experiment | 回归军：竞标/进化用真实耗时定分兵（两机制互证）+ 并行惩罚实测 |
+| E26 | parallel-penalty-experiment | 并行惩罚感知调度：6 档兵数真实采集拟合膨胀系数 α，调度器扫参选兵数 |
+| E27 | audit-army-experiment | 审计军：多 Agent 并行跨仓库体检（48 任务 4 侦察兵）+ 埋雷真拦截 |
+| E28 | federal-crosscheck-experiment | 联邦脑多方质证：chair 提议 + 自洽/离群双质证投票，假阳性拦截 |
 
 ## 一条命令起全军 / One command, one army
 

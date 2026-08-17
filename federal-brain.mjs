@@ -2,9 +2,11 @@
 // 三脑平等竞争任期锁 shared/consensus/term.lock（内容 = brainId:pid:startSec:term）
 // 主席每轮心跳 touch 锁；候补发现租约过期 → 判死 → O_EXCL 抢锁 → 新任期
 // 决策文书 shared/consensus/decrees/decree-<term>.json（覆盖写，最新即有效）
+// 多方质证（E28）：chair 提议（max severity）→ 自洽 + 离群双质证投票 → unanimous 放行 / contested/vetoed 不放行
 // argv: <meshRoot> <brainId>
 import * as fs from 'node:fs'
 import * as path from 'node:path'
+import { courtVote } from './crosscheck-brain.mjs'
 
 const [root, brainId] = process.argv.slice(2)
 const LEASE_MS = 1500
@@ -44,18 +46,18 @@ function processReports() {
   let files = []
   try { files = fs.readdirSync(dir).filter(f => f.endsWith('.json')) } catch { return null }
   if (files.length === 0) return null
-  let best = null
+  const reports = []
   for (const f of files) {
-    try {
-      const r = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf-8'))
-      const sev = r.keyNumbers?.severity ?? -1   // schema 兼容：部署域战报无 keyNumbers（severity 视为 -1）
-      if (best === null || sev > (best.keyNumbers?.severity ?? -1)) best = r
-    } catch {}
+    try { reports.push(JSON.parse(fs.readFileSync(path.join(dir, f), 'utf-8'))) } catch {}
   }
-  if (best === null) return null
+  if (reports.length === 0) return null
+  // 多方质证（E28）：chair 提议 + 自洽/离群双质证投票
+  const court = courtVote(reports)
+  if (court.status === 'no-proposal') return null
   return {
     processed: files.length,
-    verdict: { taskId: Number(best.taskId), severity: best.keyNumbers?.severity ?? null, summary: best.summary ?? best.evidence ?? '', request: best.request ?? null },
+    verdict: { taskId: court.proposal.taskId, severity: court.proposal.severity, summary: court.proposal.summary, request: court.proposal.request },
+    court: { status: court.status, agree: court.agree, highRisk: court.highRisk, votes: court.votes },
   }
 }
 
@@ -74,8 +76,15 @@ async function run() {
       heartbeat()
       const r = processReports()
       if (r !== null && Date.now() - lastDecreeAt >= DECREE_MIN_GAP_MS) {
-        fs.writeFileSync(path.join(decreesDir, `decree-${myTerm}.json`), JSON.stringify({ term: myTerm, chair: brainId, at: Date.now(), ...r }))
-        lastDecreeAt = Date.now()
+        const blocked = r.court && (r.court.status === 'vetoed' || r.court.status === 'contested-high-risk')
+        if (!blocked) {
+          fs.writeFileSync(path.join(decreesDir, `decree-${myTerm}.json`), JSON.stringify({ term: myTerm, chair: brainId, at: Date.now(), ...r }))
+          lastDecreeAt = Date.now()
+        } else {
+          // 质证拦截：decree 不放行，分歧记录落盘（可审计）
+          fs.writeFileSync(path.join(decreesDir, `contested-${myTerm}-${Date.now()}.json`), JSON.stringify({ term: myTerm, chair: brainId, at: Date.now(), court: r.court, verdict: r.verdict }))
+          log(`court blocked decree: ${r.court.status} agree=${r.court.agree}/3`)
+        }
       }
       await sleep(POLL_MS)
       continue

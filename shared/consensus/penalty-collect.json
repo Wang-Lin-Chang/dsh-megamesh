@@ -1,0 +1,272 @@
+{
+  "1": {
+    "wallMs": 254007,
+    "rows": [
+      {
+        "exp": "real-autopublish-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 143286
+      },
+      {
+        "exp": "time-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 53032
+      },
+      {
+        "exp": "real-adapter-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 16536
+      },
+      {
+        "exp": "mesh-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 10743
+      },
+      {
+        "exp": "federation-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 11528
+      },
+      {
+        "exp": "deploy-army-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 10221
+      },
+      {
+        "exp": "real-deploy-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 3777
+      },
+      {
+        "exp": "fusion-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 4790
+      }
+    ]
+  },
+  "2": {
+    "wallMs": 143621,
+    "rows": [
+      {
+        "exp": "real-autopublish-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 143545
+      },
+      {
+        "exp": "time-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 56998
+      },
+      {
+        "exp": "real-adapter-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 17747
+      },
+      {
+        "exp": "mesh-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 10741
+      },
+      {
+        "exp": "federation-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 11021
+      },
+      {
+        "exp": "deploy-army-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 10209
+      },
+      {
+        "exp": "real-deploy-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 3820
+      },
+      {
+        "exp": "fusion-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 4780
+      }
+    ]
+  },
+  "3": {
+    "wallMs": 100406,
+    "rows": [
+      {
+        "exp": "real-autopublish-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 100324
+      },
+      {
+        "exp": "time-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 63850
+      },
+      {
+        "exp": "real-adapter-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 23356
+      },
+      {
+        "exp": "mesh-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 10834
+      },
+      {
+        "exp": "federation-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 11155
+      },
+      {
+        "exp": "deploy-army-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 12136
+      },
+      {
+        "exp": "real-deploy-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 5061
+      },
+      {
+        "exp": "fusion-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 4992
+      }
+    ]
+  },
+  "4": {
+    "wallMs": 145694,
+    "rows": [
+      {
+        "exp": "real-autopublish-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 145616
+      },
+      {
+        "exp": "time-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 65915
+      },
+      {
+        "exp": "real-adapter-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 20768
+      },
+      {
+        "exp": "real-deploy-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 5858
+      },
+      {
+        "exp": "mesh-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 11032
+      },
+      {
+        "exp": "federation-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 11427
+      },
+      {
+        "exp": "deploy-army-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 13170
+      },
+      {
+        "exp": "fusion-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 6038
+      }
+    ]
+  },
+  "6": {
+    "wallMs": 88021,
+    "rows": [
+      {
+        "exp": "real-autopublish-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 87943
+      },
+      {
+        "exp": "time-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 67241
+      },
+      {
+        "exp": "real-adapter-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 26062
+      },
+      {
+        "exp": "mesh-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 11426
+      },
+      {
+        "exp": "federation-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 12998
+      },
+      {
+        "exp": "fusion-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 8118
+      },
+      {
+        "exp": "deploy-army-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 16159
+      },
+      {
+        "exp": "real-deploy-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 6388
+      }
+    ]
+  },
+  "8": {
+    "wallMs": 150976,
+    "rows": [
+      {
+        "exp": "real-autopublish-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 150893
+      },
+      {
+        "exp": "time-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 67347
+      },
+      {
+        "exp": "real-adapter-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 25967
+      },
+      {
+        "exp": "mesh-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 11797
+      },
+      {
+        "exp": "federation-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 12729
+      },
+      {
+        "exp": "deploy-army-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 17364
+      },
+      {
+        "exp": "real-deploy-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 7694
+      },
+      {
+        "exp": "fusion-experiment.mjs",
+        "exit": 0,
+        "elapsedMs": 8481
+      }
+    ]
+  }
+}

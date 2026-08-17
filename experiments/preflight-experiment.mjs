@@ -12,7 +12,7 @@ const HERE = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.join(HERE, '..')
 // 词表 = 数据（lab/bad-words.json，不入发布包）：扫描器读数据不读硬编码，天然防自匹配
 const BAD = new RegExp(JSON.parse(fs.readFileSync(path.join(ROOT, 'lab', 'bad-words.json'), 'utf-8')).join('|'))
-const SKIP_DIRS = new Set(['node_modules', 'lab', '.git'])
+const SKIP_DIRS = new Set(['node_modules', 'lab', '.git', 'shared'])   // shared=运行时账本/证据目录，非发布树
 const C = { red: '\x1b[31m', green: '\x1b[32m', yellow: '\x1b[33m', cyan: '\x1b[36m', dim: '\x1b[2m', bold: '\x1b[1m', reset: '\x1b[0m' }
 const say = (s) => console.log(s)
 const results = []

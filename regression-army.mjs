@@ -13,8 +13,8 @@ const HERE = path.dirname(fileURLToPath(import.meta.url))
 const isMain = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href
 const N = Number(process.argv[2] ?? 22)
 
-// 实验装置清单（排除 ref 夹具、preflight 自身、E25 驱动器——驱动器会再调回归军，入列即无限递归）
-export const EXPERIMENTS = fs.readdirSync(path.join(HERE, 'experiments')).filter(f => f.endsWith('.mjs') && !f.startsWith('ref-') && f !== 'regression-army-experiment.mjs').sort()
+// 实验装置清单（排除 ref 夹具、preflight 自身、驱动器——驱动器会再调回归军，入列即无限递归）
+export const EXPERIMENTS = fs.readdirSync(path.join(HERE, 'experiments')).filter(f => f.endsWith('.mjs') && !f.startsWith('ref-') && !['regression-army-experiment.mjs', 'parallel-penalty-experiment.mjs', 'audit-army-experiment.mjs'].includes(f)).sort()
 
 // 分片贪心：按耗时降序逐个分给当前总耗时最小的兵（确定性）
 export function partition(experiments, n, times) {

@@ -13,7 +13,7 @@ const root = path.resolve(rootArg ?? HERE)   // 默认 = 脚本所在项目根�
 
 // 关 1：词检（全发布树，词表=数据）
 const BAD = new RegExp(JSON.parse(fs.readFileSync(path.join(HERE, 'lab', 'bad-words.json'), 'utf-8')).join('|'))
-const SKIP = new Set(['node_modules', '.git', 'lab'])
+const SKIP = new Set(['node_modules', '.git', 'lab', 'shared'])   // shared=运行时账本/证据目录，非发布树
 const wordHits = []
 const walk = (d) => {
   for (const e of fs.readdirSync(d, { withFileTypes: true })) {
