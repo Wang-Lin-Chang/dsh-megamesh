@@ -41,7 +41,7 @@ async function run() {
     const tasks = mesh.pending().filter(t => Number(t) % totalShards === shard)
     const task = tasks[0]
     if (task === undefined) { await sleep(150); continue }
-    if (!mesh.claim(task, agentId, process.pid, Math.floor(Date.now() / 1000))) { await sleep(100); continue }
+    if (!mesh.claim(task, agentId, process.pid, Math.floor((Date.now() - process.uptime() * 1000) / 1000))) { await sleep(100); continue }
     held.add(task)
     log(`claimed ${task} -> crewai crew kickoff`)
     const report = doWork(task)

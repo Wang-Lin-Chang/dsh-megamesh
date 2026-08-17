@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.11.0] - 2026-08-17
+
+### Added
+
+- 部署军（deploy-army + deploy-scout）：发布三关由 3 侦察兵并行执行 + 联邦脑决策——多 Agent 系统服役于真实发布流程。
+- deploy-army-experiment（E24）：并行 vs 单进程对照（结果一致 + 耗时量化）。
+
+### Fixed
+
+- 联邦脑 schema 兼容：无 keyNumbers 的部署域战报不再崩脑（undefined.severity 被空 catch 吞导致主循环死亡的回归修复）。
+- 测试关重试：Windows Node 25.8.1 test runner 偶发 libuv 崩溃的装置防护。
+- 锁 startSec 语义修正（15 处 claim/tryClaim）：锁记录的 startSec 必须是进程启动秒而非 claim 时刻——D5 三证据修复后暴露的语义错误，此前被 procStartSec 失效掩盖。
+
 ## [0.10.0] - 2026-08-17
 
 ### Fixed

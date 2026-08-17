@@ -24,7 +24,7 @@ async function work() {
     const tasks = mesh.pending().filter(t => shard === null || Number(t) % totalShards === shard)
     const task = tasks[0]
     if (task === undefined) { await new Promise(r => setTimeout(r, 150)); continue }
-    if (!mesh.claim(task, agentId, process.pid, Math.floor(Date.now() / 1000))) { await new Promise(r => setTimeout(r, 100)); continue }
+    if (!mesh.claim(task, agentId, process.pid, Math.floor((Date.now() - process.uptime() * 1000) / 1000))) { await new Promise(r => setTimeout(r, 100)); continue }
     held.add(task)
     log(`claimed ${task}`)
     if (mode === 'hang') { const t0 = Date.now(); while (Date.now() - t0 < 3600000) { /* 忙循环：事件循环真阻塞——心跳也停（真实死循环语义） */ } }

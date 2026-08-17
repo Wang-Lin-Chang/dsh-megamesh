@@ -40,7 +40,7 @@ async function work() {
     const tasks = mesh.pending().filter(t => Number(t) % totalShards === shard)
     const task = tasks[0]
     if (task === undefined) { await sleep(120); continue }
-    if (!mesh.claim(task, agentId, process.pid, Math.floor(Date.now() / 1000))) { await sleep(80); continue }
+    if (!mesh.claim(task, agentId, process.pid, Math.floor((Date.now() - process.uptime() * 1000) / 1000))) { await sleep(80); continue }
     held.add(task)
     await sleep(150 + Math.random() * 200)
     const intel = gatherIntel(task)

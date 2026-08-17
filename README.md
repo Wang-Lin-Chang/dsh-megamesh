@@ -7,7 +7,7 @@
 [![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](./LICENSE)
 [![ci](https://github.com/Wang-Lin-Chang/dsh-megamesh/actions/workflows/ci.yml/badge.svg)](https://github.com/Wang-Lin-Chang/dsh-megamesh/actions/workflows/ci.yml)
 
-**每个声称带实验编号**：`experiments/` 下 23 个实验装置（E01–E23），全部真进程实测，对照组说话。
+**每个声称带实验编号**：`experiments/` 下 24 个实验装置（E01–E24），全部真进程实测，对照组说话。
 
 ## 实验编目 / Experiment index
 
@@ -36,6 +36,7 @@
 | E21 | unified-autonomy-experiment | 自治闭环：进化创新 + 影子把关 + 降级回退 |
 | E22 | real-deploy-experiment | 真实部署：四块自治砖接入日常发布流程 |
 | E23 | tech-debt-audit | 技术债审计：程序化债单（每项债带证据）|
+| E24 | deploy-army-experiment | 部署军对照：多 Agent 并行三关 vs 单进程顺序 |
 
 ## 一条命令起全军 / One command, one army
 
@@ -96,6 +97,7 @@ battlefield/
 ```bash
 node hello-megamesh.mjs                                # 一条命令起全军
 node chaos-engine.mjs <ROOT>                           # 混沌演练：随机杀自己并自愈
+node deploy-army.mjs                                   # 部署军：3 侦察兵并行三关 + 联邦脑决策（发布第一动作）
 node publish-deploy.mjs                                # 发布部署单（绿灯/黄灯/红灯）
 node daily-cruise.mjs                                  # 每日巡航（部署单自动跑，绿灯入账）
 node experiments/fusion-experiment.mjs                 # 融合总验（统一入口六实验）

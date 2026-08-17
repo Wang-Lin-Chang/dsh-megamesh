@@ -35,7 +35,7 @@ const maxDecreeTerm = () => {
 const tryClaim = () => {
   const term = Math.max(maxDecreeTerm(), parseTerm()?.term ?? 0) + 1
   try {
-    fs.writeFileSync(termPath, `${brainId}:${process.pid}:${Math.floor(Date.now() / 1000)}:${term}`, { flag: 'wx' })
+    fs.writeFileSync(termPath, `${brainId}:${process.pid}:${Math.floor((Date.now() - process.uptime() * 1000) / 1000)}:${term}`, { flag: 'wx' })
     return term
   } catch { return null }
 }
@@ -48,13 +48,14 @@ function processReports() {
   for (const f of files) {
     try {
       const r = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf-8'))
-      if (best === null || r.keyNumbers.severity > best.keyNumbers.severity) best = r
+      const sev = r.keyNumbers?.severity ?? -1   // schema 兼容：部署域战报无 keyNumbers（severity 视为 -1）
+      if (best === null || sev > (best.keyNumbers?.severity ?? -1)) best = r
     } catch {}
   }
   if (best === null) return null
   return {
     processed: files.length,
-    verdict: { taskId: Number(best.taskId), severity: best.keyNumbers.severity, summary: best.summary, request: best.request },
+    verdict: { taskId: Number(best.taskId), severity: best.keyNumbers?.severity ?? null, summary: best.summary ?? best.evidence ?? '', request: best.request ?? null },
   }
 }
 

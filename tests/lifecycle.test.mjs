@@ -16,7 +16,7 @@ test('pending → running → done（EXIT:0）', () => {
   const root = setup()
   fs.writeFileSync(path.join(root, 'intent-queue', 'task-1.json'), '{}')
   assert.equal(deriveState(root, '1'), 'pending')
-  fs.writeFileSync(path.join(root, 'intent-queue', 'task-1.lock'), `w:${process.pid}:${Math.floor(Date.now() / 1000)}`)
+  fs.writeFileSync(path.join(root, 'intent-queue', 'task-1.lock'), `w:${process.pid}:${Math.floor((Date.now() - process.uptime() * 1000) / 1000)}`)
   assert.equal(deriveState(root, '1'), 'running')
   fs.renameSync(path.join(root, 'intent-queue', 'task-1.json'), path.join(root, 'done', 'task-1.json'))
   fs.writeFileSync(path.join(root, 'done', 'task-1.result.json'), '{}')
@@ -29,7 +29,7 @@ test('pending → running → done（EXIT:0）', () => {
 test('orphaned → adopted：死持有者锁残留', () => {
   const root = setup()
   fs.writeFileSync(path.join(root, 'intent-queue', 'task-2.json'), '{}')
-  fs.writeFileSync(path.join(root, 'intent-queue', 'task-2.lock'), `ghost:999999:${Math.floor(Date.now() / 1000)}`)   // 不存在的 pid
+  fs.writeFileSync(path.join(root, 'intent-queue', 'task-2.lock'), `ghost:999999:${Math.floor((Date.now() - process.uptime() * 1000) / 1000)}`)   // 不存在的 pid
   assert.equal(deriveState(root, '2'), 'orphaned')
   fs.writeFileSync(path.join(root, 'shared', 'dead-letter', 'task-2.json'), '{}')
   fs.unlinkSync(path.join(root, 'intent-queue', 'task-2.lock'))

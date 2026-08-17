@@ -34,7 +34,7 @@ async function work() {
     const tasks = mesh.pending().filter(t => shard === null || Number(t) % totalShards === shard)
     const task = tasks[0]
     if (task === undefined) { await new Promise(r => setTimeout(r, 120)); continue }
-    if (!mesh.claim(task, agentId, process.pid, Math.floor(Date.now() / 1000))) { await new Promise(r => setTimeout(r, 80)); continue }
+    if (!mesh.claim(task, agentId, process.pid, Math.floor((Date.now() - process.uptime() * 1000) / 1000))) { await new Promise(r => setTimeout(r, 80)); continue }
     held.add(task)
     log(`claimed ${task}`)
     await new Promise(r => setTimeout(r, 150 + Math.random() * 200))

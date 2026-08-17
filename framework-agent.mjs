@@ -17,7 +17,7 @@ const hb = setInterval(() => { for (const t of held) mesh.heartbeat(t) }, mesh.h
 log(`started pid=${process.pid} framework=${framework} shard=${shardSpec}`)
 
 // 契约 1/4：claimTask —— O_EXCL 租约锁（框架兵与原生兵同锁协议）
-function claimTask(taskId) { return mesh.claim(taskId, agentId, process.pid, Math.floor(Date.now() / 1000)) }
+function claimTask(taskId) { return mesh.claim(taskId, agentId, process.pid, Math.floor((Date.now() - process.uptime() * 1000) / 1000)) }
 
 // 契约 2：doWork —— 框架内部干活（两种框架语言），产出 { fullText, report }
 function doWork(taskId) {

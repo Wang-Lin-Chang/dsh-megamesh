@@ -12,7 +12,7 @@ test('任务生命周期：enqueue/claim/finish + EXIT:0', () => {
   const mm = setup()
   mm.enqueue(1, { n: 1 })
   assert.equal(mm.lifecycle(1), 'pending')
-  assert.ok(mm.claim(1, 'w', process.pid, Math.floor(Date.now() / 1000)))
+  assert.ok(mm.claim(1, 'w', process.pid, Math.floor((Date.now() - process.uptime() * 1000) / 1000)))
   assert.equal(mm.lifecycle(1), 'running')
   mm.finish(1, JSON.stringify({ ok: true }))
   assert.equal(mm.lifecycle(1), 'done')
@@ -43,7 +43,7 @@ test('全文冷引用：归档→本地取回 + 主宇宙回源 + 未归档 null
 test('终态审计：成对/因果/军法/锁残留全查', () => {
   const mm = setup()
   mm.enqueue(5, { n: 5 })
-  mm.claim(5, 'w', process.pid, Math.floor(Date.now() / 1000))
+  mm.claim(5, 'w', process.pid, Math.floor((Date.now() - process.uptime() * 1000) / 1000))
   mm.finish(5, JSON.stringify({ ok: true }))
   mm.release(5)
   fs.writeFileSync(path.join(mm.root, 'shared', 'reports', 'report-5.json'), JSON.stringify({ agentId: 's', taskId: '5', summary: '北境发现魔教探子，威胁度36', keyNumbers: { severity: 36, task: 5 }, stateChanges: [], request: '常规记录' }))

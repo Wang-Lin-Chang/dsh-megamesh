@@ -13,7 +13,7 @@ const mesh = new MeshCore(ROOT, { leaseMs: 400, heartbeatMs: 100 })
 mesh.enqueue(1, { n: 1 })
 mesh.enqueue(2, { n: 2 })
 check('任务入队', mesh.pending().length === 2, String(mesh.pending().length))
-check('O_EXCL claim', mesh.claim(1, 'a', process.pid, Math.floor(Date.now() / 1000)) === true)
+check('O_EXCL claim', mesh.claim(1, 'a', process.pid, Math.floor((Date.now() - process.uptime() * 1000) / 1000)) === true)
 check('锁互斥（二次 claim 失败）', mesh.claim(1, 'b', process.pid, 0) === false)
 check('锁内容协议', /^a:\d+:\d+$/.test(mesh.readLock(1)), mesh.readLock(1))
 check('心跳有效（锁 mtime 更新）', mesh.heartbeat(1) === true)
@@ -32,7 +32,7 @@ check('完成入 done', fs.existsSync(path.join(ROOT, 'done', 'task-2.json')) &&
 
 // 收养（三证据：pid 死）
 mesh.enqueue(3, { n: 3 })
-mesh.claim(3, 'dead-agent', 999999, Math.floor(Date.now() / 1000))   // 不存在的 pid
+mesh.claim(3, 'dead-agent', 999999, Math.floor((Date.now() - process.uptime() * 1000) / 1000))   // 不存在的 pid
 const swept2 = mesh.sweep()
 check('三证据收养（pid 死）', swept2.length === 1 && swept2[0].reason.includes('agent-dead'), JSON.stringify(swept2))
 
