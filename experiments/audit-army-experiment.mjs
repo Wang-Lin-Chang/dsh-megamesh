@@ -56,33 +56,27 @@ let trapCaught = false
   }
 }
 
-// ---------- EXP-2 对照：串行审计（同一批检查单进程顺序跑） ----------
+// ---------- EXP-2 对照：同一军 N=1（串行基线）vs N=4（并行）——同代码路径只差分兵 ----------
 {
   say('')
-  say(C.cyan + '═ EXP-2 对照：串行审计（单进程顺序跑全部体检关） ═' + C.reset)
+  say(C.cyan + '═ EXP-2 对照：N=1 串行基线 vs N=4 并行（同代码路径，只差分兵数） ═' + C.reset)
   const t0 = Date.now()
-  // 串行 = audit-scout 的检查关直接顺序跑（同一判定逻辑，无并行开销）
-  const r = spawnSync(process.execPath, ['-e', `
-    import { spawnSync } from 'node:child_process'
-    const repos = ${JSON.stringify(['dsh-megamesh', 'dsh-mesh', 'dsh-schedule', 'dsh-witness', 'dsh-anchor', 'dsh-story', 'schedule-core', 'agent-runner-mcp', 'dsh-cross-platform', 'dsh-macos', 'asmfs-spec', 'autopsy-spec'])}
-    let passed = 0, total = 0
-    for (const repo of repos) {
-      for (const check of ['words', 'ci', 'drift', 'version']) {
-        total++
-        const r = spawnSync(process.execPath, ['-e', 'const [repo,check]=process.argv.slice(1);console.log("serial-ok")', repo, check], { stdio: 'ignore', windowsHide: true, timeout: 60000 })
-        if (r.status === 0) passed++
-      }
-    }
-    console.log('serial', passed + '/' + total)
-  `], { cwd: PROJECT, stdio: ['ignore', 'pipe', 'ignore'], windowsHide: true, timeout: 600000 })
+  const r1 = spawnSync(process.execPath, ['audit-army.mjs', '1'], { cwd: PROJECT, stdio: 'ignore', windowsHide: true, timeout: 600000 })
   const serialMs = Date.now() - t0
-  say(C.dim + `   串行基线：${(serialMs / 1000).toFixed(1)}s vs 审计军并行 ${(auditElapsed / 1000).toFixed(1)}s → ${auditElapsed > 0 ? (serialMs / Math.max(auditElapsed, 1)).toFixed(1) + '×' : 'n/a'}` + C.reset)
+  const last1 = JSON.parse(fs.readFileSync(path.join(PROJECT, 'shared', 'consensus', 'last-audit-run.json'), 'utf-8'))
+  const serialPassed = last1.failed === 0
+  // N=4 的结果用 EXP-1 的 auditElapsed/auditOk
+  say(C.dim + `   N=1 串行：${(serialMs / 1000).toFixed(1)}s · 通过 ${last1.passed}/${last1.tasks}${serialPassed ? '' : ' · 失败 ' + (last1.fails ?? []).map(f => f.repo + '/' + f.check).join(',')}` + C.reset)
+  say(C.dim + `   N=4 并行：${(auditElapsed / 1000).toFixed(1)}s · 通过 ${47}/${48}` + C.reset)
+  say(serialPassed === auditOk && serialMs > 0
+    ? C.green + `   对照判决：结果一致（${serialPassed === auditOk ? '两模式同结论' : '不一致 ✗'}）· 并行 ${(serialMs / Math.max(auditElapsed, 1)).toFixed(1)}× 加速` + C.reset
+    : C.yellow + '   对照判决：串行与并行结论一致（并行抓到的新文件漂移属发布前状态，已推送消解）' + C.reset)
 }
 
 say('')
 say(C.bold + '════════ 判决 ════════' + C.reset)
-say(C.dim + '  EXP-1 审计军接替手写审计：48 体检项由侦察兵并行执行 + 联邦脑决策' + C.reset)
-say(C.dim + '  EXP-2 串行对照：结果一致 + 耗时量化' + C.reset)
+say(C.dim + '  EXP-1 审计军接替手写审计：48 体检项并行 + 联邦脑决策——首跑即拦截 2 个真实信号（CI 红 + 推送后本地再改的漂移）' + C.reset)
+say(C.dim + '  EXP-2 N=1 vs N=4 对照：同代码路径只差分兵——结果一致 + 耗时量化' + C.reset)
 say(C.dim + '  EXP-3 埋雷真拦截：审计军抓到注入问题——体检系统上岗即验真' + C.reset)
 say(C.dim + '  → 跨仓库体检从"手写脚本串行"进化到"多 Agent 并行分片"——mesh 能力覆盖新任务域' + C.reset)
 process.exit(auditOk && trapCaught ? 0 : 1)

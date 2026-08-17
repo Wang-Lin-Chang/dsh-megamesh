@@ -4,10 +4,12 @@ import assert from 'node:assert/strict'
 import * as fs from 'node:fs'
 import * as path from 'node:path'
 
-// E25 驱动器会再调回归军：入列装置清单即无限递归（装置事实）
-test('E25 驱动器不入装置清单（递归防护）', () => {
+// 驱动器会再调回归军：入列装置清单即无限递归（装置事实）
+test('驱动器不入装置清单（递归防护）', () => {
   const src = fs.readFileSync(path.join(process.cwd(), 'regression-army.mjs'), 'utf-8')
-  assert.ok(src.includes("f !== 'regression-army-experiment.mjs'"), 'EXPERIMENTS 应排除 E25 驱动器')
+  assert.ok(src.includes("'regression-army-experiment.mjs'"), 'EXPERIMENTS 应排除 E25 驱动器')
+  assert.ok(src.includes("'parallel-penalty-experiment.mjs'"), 'EXPERIMENTS 应排除 E26 驱动器')
+  assert.ok(src.includes("'audit-army-experiment.mjs'"), 'EXPERIMENTS 应排除 E27 驱动器')
   assert.ok(src.includes('!f.startsWith(\'ref-\')'), 'EXPERIMENTS 应排除 ref 夹具')
 })
 

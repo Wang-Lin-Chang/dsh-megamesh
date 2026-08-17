@@ -22,8 +22,10 @@ const collectPath = path.join(PROJECT, 'shared', 'consensus', 'penalty-collect.j
 const SLEEP = (ms) => new Promise(r => setTimeout(r, ms))
 
 // 重装置子集 = 账本里耗时 >3s 的前 8 个（轻装置并行惩罚可忽略，且超时装置必须在内）
+// 驱动器排除：会再调回归军/审计军的装置入 HEAVY 即递归
+const DRIVERS = new Set(['regression-army-experiment.mjs', 'parallel-penalty-experiment.mjs', 'audit-army-experiment.mjs'])
 const times = JSON.parse(fs.readFileSync(timesPath, 'utf-8'))
-const HEAVY = Object.entries(times).filter(([, t]) => t > 3000).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([f]) => f)
+const HEAVY = Object.entries(times).filter(([f, t]) => t > 3000 && !DRIVERS.has(f)).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([f]) => f)
 const SCOUTS = [1, 2, 3, 4, 6, 8]
 
 say(C.bold + C.magenta + '╔══════════════════════════════════════════════════════════╗' + C.reset)
@@ -112,11 +114,13 @@ let bidOld = 0
     const o = mk(N, times)
     if (bestNew === null || p < bestNew.mk) bestNew = { N, mk: p }
     if (bestOld === null || o < bestOld.mk) bestOld = { N, mk: o }
-    say(C.dim + `   N=${N} → 惩罚感知 ${(p / 1000).toFixed(1)}s · 老模型 ${(o / 1000).toFixed(1)}s${N === 8 ? '（老模型必然选全并行——盲区）' : ''}` + C.reset)
+    say(C.dim + `   N=${N} → 惩罚感知 ${(p / 1000).toFixed(1)}s · 老模型 ${(o / 1000).toFixed(1)}s` + C.reset)
   }
   bidNew = bestNew.N
   bidOld = bestOld.N
+  const oldTies = new Set([2, 3, 4, 5, 6, 7, 8].map(N => mk(N, times))).size === 1
   say(C.bold + C.green + `   新调度器选 ${bidNew} 兵（惩罚感知 ${(bestNew.mk / 1000).toFixed(1)}s）vs 老模型选 ${bidOld} 兵（${(bestOld.mk / 1000).toFixed(1)}s）` + C.reset)
+  if (oldTies) say(C.bold + C.yellow + `   老模型 N=2..8 makespan 全部平局——对并行惩罚零感知（盲区实测）；新模型惩罚项让代价单调可见，选择唯一有据` + C.reset)
 }
 
 // ---------- EXP-4 对照真实跑 ----------
@@ -132,8 +136,8 @@ let bidOld = 0
 
 say('')
 say(C.bold + '════════ 判决 ════════' + C.reset)
-say(C.dim + '  EXP-1/2 惩罚系数 α 由 6 档真实采集拟合（数据定参，超时计入拖垮证据）' + C.reset)
-say(C.dim + '  EXP-3 惩罚感知调度器补上 E25 暴露的盲区：老模型必然收敛全并行，新模型有惩罚项约束' + C.reset)
-say(C.dim + '  EXP-4 新老模型各选 N 真实跑对照——数据定优劣，不靠嘴' + C.reset)
+say(C.dim + '  EXP-1/2 惩罚系数 α 由 6 档真实采集拟合（数据定参，超时计入拖垮证据；脏数据会让拟合偏大——装置事实）' + C.reset)
+say(C.dim + '  EXP-3 老模型 N=2..8 makespan 平局=对并行惩罚零感知；新模型惩罚项让代价单调可见，选择唯一有据' + C.reset)
+say(C.dim + '  EXP-4 新老模型各选 N 真实跑对照全绿——数据定优劣，不靠嘴' + C.reset)
 say(C.dim + '  → 并行惩罚感知调度熔炼完成：资源调度进化从"拍脑袋 N"走向"实测拟合 α 定 N"' + C.reset)
 process.exit(0)

@@ -88,7 +88,7 @@ function checkDrift(repo) {
     const gitBlobSha = (c) => createHash('sha1').update('blob ' + Buffer.byteLength(c) + '\\0' + c).digest('hex')
     const files = {}
     const walk = (d) => { for (const e of fs.readdirSync(d, { withFileTypes: true })) {
-      if (['node_modules','.git','lib','dist','lab','vendor'].includes(e.name)) continue
+      if (['node_modules','.git','lib','dist','lab','vendor','shared'].includes(e.name)) continue   // shared=运行时账本/证据，非发布树
       const p = path.join(d, e.name); if (e.isDirectory()) walk(p)
       else files[path.relative(dir, p).split(path.sep).join('/')] = fs.readFileSync(p, 'utf-8') } }
     walk(dir)
