@@ -7,7 +7,7 @@
 [![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](./LICENSE)
 [![ci](https://github.com/Wang-Lin-Chang/dsh-megamesh/actions/workflows/ci.yml/badge.svg)](https://github.com/Wang-Lin-Chang/dsh-megamesh/actions/workflows/ci.yml)
 
-**每个声称带实验编号**：`experiments/` 下 38 个实验装置（E01–E38），全部真进程实测，对照组说话。
+**每个声称带实验编号**：`experiments/` 下 39 个实验装置（E01–E39），全部真进程实测，对照组说话。
 
 ## 实验编目 / Experiment index
 
@@ -51,6 +51,7 @@
 | E36 | meta-audit-experiment | 元审计军：三独立实现交叉审计 + 盲区注入 + 分歧账本 |
 | E37 | adapter-evolver-experiment | 框架自动适配进化器：扫描生成骨架 + 影子法庭转正 + 元契约 |
 | E38 | byzantine-sig-experiment | 拜占庭签名验证：Ed25519 验签 + 2/3 背书 + D-10~D-12 死因分类 |
+| E39 | audit-tower-experiment | 审计塔 φ 衰减命题实测：三级自指结构 + 等价条件（p=1/φ²）+ 特例验证 |
 
 ## 一条命令起全军 / One command, one army
 
