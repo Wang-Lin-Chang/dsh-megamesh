@@ -7,7 +7,7 @@
 [![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](./LICENSE)
 [![ci](https://github.com/Wang-Lin-Chang/dsh-megamesh/actions/workflows/ci.yml/badge.svg)](https://github.com/Wang-Lin-Chang/dsh-megamesh/actions/workflows/ci.yml)
 
-**每个声称带实验编号**：`experiments/` 下 40 个实验装置（E01–E40），全部真进程实测，对照组说话。
+**每个声称带实验编号**：`experiments/` 下 41 个实验装置（E01–E41），全部真进程实测，对照组说话。
 
 ## 实验编目 / Experiment index
 
@@ -53,6 +53,7 @@
 | E38 | byzantine-sig-experiment | 拜占庭签名验证：Ed25519 验签 + 2/3 背书 + D-10~D-12 死因分类 |
 | E39 | audit-tower-experiment | 审计塔 φ 衰减命题实测：三级自指结构 + 等价条件（p=1/φ²）+ 特例验证 |
 | E40 | arena-protocol-experiment | 推理竞技场 ARENA：证词+军法结构审+三票擂台+平行宇宙翻案+裁判任期治理 |
+| E41 | arena-live-llm-experiment | ARENA 真模型擂台：DeepSeek 双模型证词 + 幻觉黄金标准（不可知问题）对照 |
 
 ## 一条命令起全军 / One command, one army
 

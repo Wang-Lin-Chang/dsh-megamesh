@@ -1,6 +1,6 @@
 {
   "name": "dsh-megamesh",
-  "version": "0.22.0",
+  "version": "0.23.0",
   "description": "Super multi-agent architecture: files are messages, adoption replaces all-hands-on-deck failure, term leases replace single points, invariants replace trust, timelines replace non-reproducibility, one file serves humans and machines. Every claim carries an experiment number.",
   "type": "module",
   "files": [
