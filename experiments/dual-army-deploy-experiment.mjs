@@ -31,10 +31,11 @@ let flipOk = false
     const r = spawnSync(process.execPath, ['audit-army.mjs', '4'], { cwd: PROJECT, stdio: 'ignore', windowsHide: true, timeout: 600000, env: { ...process.env, AUDIT_ONESHOT_TRAP: trapFile } })
     const last = JSON.parse(fs.readFileSync(lastAuditPath, 'utf-8'))
     const review = last.reviewRound
-    flipOk = (last.failed ?? 0) > 0 && (review?.candidates ?? 0) > 0 && (review?.flipped?.length ?? 0) > 0 && (last.failed ?? 0) < (review?.candidates ?? Infinity)
-    say(last.failed > 0 && review?.candidates > 0
-      ? C.green + `   ✓ 首圈抓 ${review.candidates} 个候选失败 → 复核轮翻转 ${review.flipped.length} 个（不同侦察兵重查通过——偶发过滤生效）` + C.reset
-      : C.yellow + `   ⚠ 偶发失败未触发复核轮（failed=${last.failed} candidates=${review?.candidates ?? 0} flipped=${review?.flipped?.length ?? 0}）` + C.reset)
+    // 翻转语义：首圈陷阱失败进复核轮（candidates>0）→ 重查通过（flipped>0）→ 最终零失败（failed=0）
+    flipOk = (review?.candidates ?? 0) > 0 && (review?.flipped?.length ?? 0) > 0 && (last.failed ?? -1) === 0
+    say(flipOk
+      ? C.green + `   ✓ 首圈抓 ${review.candidates} 个候选失败 → 复核轮翻转 ${review.flipped.length} 个 → 最终 ${last.failed} 失败（偶发过滤生效）` + C.reset
+      : C.yellow + `   ⚠ 偶发失败未按预期翻转（failed=${last.failed} candidates=${review?.candidates ?? 0} flipped=${review?.flipped?.length ?? 0}）` + C.reset)
   } finally {
     if (fs.existsSync(trapFile)) fs.unlinkSync(trapFile)   // 恢复
     say(C.dim + '   已清理一次性陷阱' + C.reset)
