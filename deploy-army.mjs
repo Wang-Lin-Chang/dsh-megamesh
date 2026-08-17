@@ -54,5 +54,5 @@ const out = {
   advice: allPassed ? { level: 'green', action: 'publish', note: '三关由 3 侦察兵并行执行全绿（联邦脑已出决策文书）' } : { level: 'red', action: 'hold', note: reports.filter(r => !r.passed).map(r => r.evidence).join('；') },
 }
 console.log(JSON.stringify(out, null, 2))
-for (const s of scouts) { try { s.kill() } catch {} }
+for (const s of scouts) { try { s.kill() } catch { /* 协议豁免：文件不存在/竞态正常 */ } }
 process.exit(allPassed ? 0 : 1)

@@ -44,7 +44,7 @@ export function parse(md) {
   const sevRow = /^\| severity \| (\d+) \|$/m.exec(md)
   const annotations = []
   for (const m of md.matchAll(/^> 【批注】(\{[\s\S]*?\})$/gm)) {
-    try { annotations.push(JSON.parse(m[1])) } catch {}
+    try { annotations.push(JSON.parse(m[1])) } catch (e) { console.error('clerk-worker.mjs:47 catch', e?.message ?? e) }
   }
   return {
     json: jsonBlock ? JSON.parse(jsonBlock[1]) : null,
@@ -124,7 +124,7 @@ if (isMain) {
             logAction({ at: Date.now(), file: f, type: 'applied', applied: r.applied })
           }
         }
-      } catch {}
+      } catch (e) { console.error('clerk-worker.mjs:127 catch', e?.message ?? e) }
       await sleep(200)
     }
   })()

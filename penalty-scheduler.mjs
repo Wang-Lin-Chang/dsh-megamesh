@@ -42,7 +42,8 @@ export function pickN(experiments, times, alpha, maxN = 8) {
 
 // 生产入口：读账本 → 拟合 α → 定 N（账本缺失时降级 α=0 → 等价纯 makespan，诚实记录降级）
 // 风险项（E31）：超时率账本存在时，riskAware(N) = penalizedMakespan × (1 + γ·r(N))——γ 由最坏档实测锚定
-// 诚实语义：当前数据超时率 0% → γ=0 → 选稳=选快；拖垮数据再现时风险项自动激活（数据说险就是险）
+// α 账本策略（E33）：alpha-policy.json 落盘——strategy=indeterminate（样本不足）时不冒充定论，
+// 生产上取最近一轮实测 α（最接近当前负载），历史供将来判别策略用
 export function scheduleN(times, collectPath = path.join(HERE, 'shared', 'consensus', 'penalty-collect.json'), { maxN = 8, timeoutPath = null } = {}) {
   let alpha = 0
   let degraded = false
@@ -52,6 +53,24 @@ export function scheduleN(times, collectPath = path.join(HERE, 'shared', 'consen
     if (keys.length >= 2) alpha = fitAlpha(collect)
     else degraded = true
   } else degraded = true
+  // 账本策略（E33）：历史账本存在时，α 取最近一轮实测（策略判别样本不足时以最近实测为准——不冻结、不冒充）
+  const historyPathResolved = path.join(HERE, 'shared', 'consensus', 'penalty-history.jsonl')
+  let alphaSource = degraded ? 'degraded' : 'penalty-collect.json'
+  let policyNote = null
+  if (fs.existsSync(historyPathResolved)) {
+    try {
+      const lines = fs.readFileSync(historyPathResolved, 'utf-8').trim().split('\n').filter(Boolean).map(l => JSON.parse(l))
+      if (lines.length > 0) {
+        alpha = lines[lines.length - 1].alpha   // 最近一轮实测
+        alphaSource = `penalty-history.jsonl(round ${lines[lines.length - 1].round})`
+        const policyPath = path.join(HERE, 'shared', 'consensus', 'alpha-policy.json')
+        if (fs.existsSync(policyPath)) {
+          const pol = JSON.parse(fs.readFileSync(policyPath, 'utf-8'))
+          policyNote = pol.note ?? null
+        }
+      }
+    } catch (e) { /* 协议豁免：账本解析失败回退快照 α（上方已赋值）——不是债，是降级语义 */ }
+  }
   // 超时风险账本（E31）：timeout-collect.json，超时率 r(N) + γ
   let gamma = 0
   const timeoutPathResolved = timeoutPath ?? path.join(HERE, 'shared', 'consensus', 'timeout-collect.json')
@@ -78,5 +97,5 @@ export function scheduleN(times, collectPath = path.join(HERE, 'shared', 'consen
     const risk = mk * (1 + gamma * rateOf(N))
     if (best === null || risk < best.risk - 0.5) best = { N, mk, risk }
   }
-  return { N: best?.N ?? 1, makespanMs: best?.mk ?? 0, riskAdjustedMs: best?.risk ?? 0, alpha, gamma, degraded, source: degraded ? 'degraded(no ledger)' : 'penalty-collect.json' }
+  return { N: best?.N ?? 1, makespanMs: best?.mk ?? 0, riskAdjustedMs: best?.risk ?? 0, alpha, gamma, degraded, source: alphaSource, policyNote }
 }

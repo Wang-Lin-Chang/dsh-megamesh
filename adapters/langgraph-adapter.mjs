@@ -10,7 +10,7 @@ export async function probeLangGraph() {
     try {
       const pkg = await import('@langchain/langgraph/package.json', { with: { type: 'json' } })
       version = pkg.default?.version ?? 'unknown'
-    } catch {}
+    } catch (e) { console.error('langgraph-adapter.mjs:13 catch', e?.message ?? e) }
     const has = (k) => typeof lg[k] !== 'undefined'
     return {
       installed: true, version,

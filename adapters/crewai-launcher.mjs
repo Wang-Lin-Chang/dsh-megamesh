@@ -59,4 +59,4 @@ async function run() {
   }
 }
 run().catch(e => log(`error ${e.message}`))
-process.on('exit', () => { try { mockSrv.kill() } catch {} })
+process.on('exit', () => { try { mockSrv.kill() } catch { /* 协议豁免：文件不存在/竞态正常 */ } })

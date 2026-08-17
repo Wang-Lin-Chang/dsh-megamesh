@@ -68,7 +68,7 @@ export class MegaMesh {
         const p = path.join(dir, f)
         try {
           if (Date.now() - fs.statSync(p).mtimeMs > maxAgeMs) { fs.unlinkSync(p); cleaned++ }
-        } catch {}
+        } catch { /* 协议豁免：文件不存在/竞态正常 */ }
       }
     }
     return cleaned
@@ -111,9 +111,9 @@ export class MegaMesh {
   }
   lookupFullText(digest) {
     // 本地全文库 → 主宇宙全文库（冷引用回源）→ null
-    try { return fs.readFileSync(path.join(this.root, 'shared', 'fulltext', `${digest}.txt`), 'utf-8') } catch {}
+    try { return fs.readFileSync(path.join(this.root, 'shared', 'fulltext', `${digest}.txt`), 'utf-8') } catch (e) { console.error('megamesh.mjs:114 catch', e?.message ?? e) }
     if (this.primaryFulltext) {
-      try { return fs.readFileSync(path.join(this.primaryFulltext, `${digest}.txt`), 'utf-8') } catch {}
+      try { return fs.readFileSync(path.join(this.primaryFulltext, `${digest}.txt`), 'utf-8') } catch (e) { console.error('megamesh.mjs:116 catch', e?.message ?? e) }
     }
     return null
   }

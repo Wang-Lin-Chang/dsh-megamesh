@@ -62,7 +62,7 @@ export class MeshCore {
   logEvent(type, data) {
     try {
       fs.appendFileSync(path.join(this.root, 'agents', 'mesh-events.jsonl'), JSON.stringify({ at: Date.now(), type, ...data }) + '\n')
-    } catch {}
+    } catch (e) { console.error('mesh-core.mjs:65 catch', e?.message ?? e) }
   }
 
   // ---------- 完成：任务 → done ----------

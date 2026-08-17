@@ -57,7 +57,7 @@ let metrics = null, winner = null
   say(C.cyan + '═ EXP-2 对照：胜者 vs 固定默认 gap-5 vs 随机选——留出批验证 ═' + C.reset)
   const w = decide({ id: 'winner', kind: winner.id.startsWith('gap') ? 'gap' : 'topk', delta: winner.id.startsWith('gap') ? Number(winner.id.split('-')[1]) : undefined, k: winner.id.startsWith('topk') ? Number(winner.id.split('-')[1]) : undefined }, HOLDOUT.reports, REINFORCED, HOLDOUT.truth)
   const d = decide(STRATEGY_POOL.find(s => s.id === 'gap-5'), HOLDOUT.reports, REINFORCED, HOLDOUT.truth)
-  const r = decide(STRATEGY_POOL[Math.floor(Math.random() * STRATEGY_POOL.length)], HOLDOUT.reports, REINFORCED, HOLDOUT.truth)
+  const r = decide(STRATEGY_POOL[7 % STRATEGY_POOL.length], HOLDOUT.reports, REINFORCED, HOLDOUT.truth)   // D6 确定性债：随机选改种子定序（7 号策略，判决可复现）
   say(C.green + `   ✓ 竞标胜者：正确=${w.correct ? '✓' : '✗'} 成本=${w.expands}×${w.roundtrips}` + C.reset)
   say(C.dim + `   固定默认 gap-5：正确=${d.correct ? '✓' : '✗'} 成本=${d.expands}×${d.roundtrips} · 随机选：正确=${r.correct ? '✓' : '✗'} 成本=${r.expands}×${r.roundtrips}` + C.reset)
   const win = w.correct && w.expands * w.roundtrips <= d.expands * d.roundtrips

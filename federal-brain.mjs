@@ -50,7 +50,7 @@ function processReports() {
   if (files.length === 0) return null
   const reports = []
   for (const f of files) {
-    try { reports.push(JSON.parse(fs.readFileSync(path.join(dir, f), 'utf-8'))) } catch {}
+    try { reports.push(JSON.parse(fs.readFileSync(path.join(dir, f), 'utf-8'))) } catch (e) { console.error('federal-brain.mjs:53 catch', e?.message ?? e) }
   }
   if (reports.length === 0) return null
   // 多方质证（E28）：chair 提议 + 自洽/离群双质证投票
@@ -112,7 +112,7 @@ async function run() {
     }
     if (termAge() > LEASE_MS) {
       log(`chair ${owner.brainId} term=${owner.term} lease expired -> contend`)
-      try { fs.unlinkSync(termPath) } catch {}
+      try { fs.unlinkSync(termPath) } catch { /* 协议豁免：文件不存在/竞态正常 */ }
       continue
     }
     await sleep(POLL_MS)

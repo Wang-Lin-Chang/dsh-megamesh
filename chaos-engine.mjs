@@ -121,7 +121,7 @@ if (victim.role === 'scout') {
 const doneBefore = doneCount()
 say(C.red + `💀 随机击杀：${victim.role === 'chair' ? '主席 ' : '侦察兵 '}${victim.id}（pid ${victim.pid}${victim.task ? '，持锁任务 ' + victim.task : '，任期 ' + victim.term}）→ KILL -9` + C.reset)
 const tKill = Date.now()
-try { process.kill(victim.pid, 'SIGKILL') } catch {}
+try { process.kill(victim.pid, 'SIGKILL') } catch (e) { console.error('chaos-engine.mjs:124 catch', e?.message ?? e) }
 
 // ---------- 4. 自愈 + 恢复验证 ----------
 let report

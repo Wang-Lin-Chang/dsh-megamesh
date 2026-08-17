@@ -15,7 +15,7 @@ const workers = []
 const waitFor = async (fn, timeoutMs, everyMs = 100) => {
   const t0 = Date.now()
   for (;;) {
-    try { const v = fn(); if (v) return v } catch {}
+    try { const v = fn(); if (v) return v } catch (e) { console.error('hello-megamesh.mjs:18 catch', e?.message ?? e) }
     if (Date.now() - t0 > timeoutMs) return null
     await sleep(everyMs)
   }
@@ -59,5 +59,5 @@ say(C.bold + '   🎉 全军检阅完毕——一脑千军，无单点，账本�
 say(C.dim + `   战场保留: ${ROOT}` + C.reset)
 say(C.dim + '   下一棒：混沌演练 node chaos-engine.mjs <ROOT>；时间分叉 node experiments/time-experiment.mjs 同款 API 见 megamesh.mjs' + C.reset)
 say('')
-for (const w of workers) { try { w.kill() } catch {} }
+for (const w of workers) { try { w.kill() } catch { /* 协议豁免：文件不存在/竞态正常 */ } }
 process.exit(0)

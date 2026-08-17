@@ -58,7 +58,7 @@ async function expand(tasks) {
         const r = JSON.parse(fs.readFileSync(p, 'utf-8'))
         resps[t] = r
         readBytes += fs.statSync(p).size
-      } catch {}
+      } catch { /* 协议豁免：文件不存在/竞态正常 */ }
     }
     await sleep(100)
   }

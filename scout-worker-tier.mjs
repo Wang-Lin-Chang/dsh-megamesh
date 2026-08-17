@@ -81,10 +81,10 @@ async function respondLoop() {
             region: m ? m[1] : 'unknown',
             digestOk: digestOf(full) === (req.digests?.[String(task)] ?? null),
           }
-          try { fs.writeFileSync(path.join(respsDir, `resp-${task}-${resp.field}.json`), JSON.stringify(resp), { flag: 'wx' }) } catch {}
+          try { fs.writeFileSync(path.join(respsDir, `resp-${task}-${resp.field}.json`), JSON.stringify(resp), { flag: 'wx' }) } catch (e) { console.error('scout-worker-tier.mjs:84 catch', e?.message ?? e) }
         }
       }
-    } catch {}
+    } catch (e) { console.error('scout-worker-tier.mjs:87 catch', e?.message ?? e) }
     await sleep(150)
   }
 }

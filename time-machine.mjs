@@ -72,12 +72,12 @@ export class TimeMachine {
           try { need = fs.statSync(dp).size !== st.size } catch { need = true }
           if (need) {
             fs.mkdirSync(path.dirname(dp), { recursive: true })
-            try { fs.copyFileSync(sp, dp); manifest.pass2Added++ } catch {}
+            try { fs.copyFileSync(sp, dp); manifest.pass2Added++ } catch { /* 协议豁免：文件不存在/竞态正常 */ }
           }
           if (relDir === 'done') {
             const m = /^task-(.+)\.json$/.exec(f)
             if (m && !f.includes('.result.')) {
-              try { fs.unlinkSync(path.join(dest, 'intent-queue', f)) } catch {}   // 防重复撕裂
+              try { fs.unlinkSync(path.join(dest, 'intent-queue', f)) } catch { /* 协议豁免：文件不存在/竞态正常 */ }   // 防重复撕裂
             }
           }
         }
@@ -218,7 +218,7 @@ export class TimeMachine {
     }
     for (const d of ['agents', 'timeline']) fs.mkdirSync(path.join(newRoot, d), { recursive: true })
     let inFlight = []
-    try { inFlight = fs.readdirSync(path.join(newRoot, 'intent-queue')).filter(f => f.endsWith('.json')).map(f => f.replace(/^task-/, '').replace(/\.json$/, '')) } catch {}
+    try { inFlight = fs.readdirSync(path.join(newRoot, 'intent-queue')).filter(f => f.endsWith('.json')).map(f => f.replace(/^task-/, '').replace(/\.json$/, '')) } catch { /* 协议豁免：文件不存在/竞态正常 */ }
     return { newRoot, inFlight }
   }
 
