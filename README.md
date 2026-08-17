@@ -95,6 +95,8 @@ battlefield/
 ```bash
 node hello-megamesh.mjs                                # 一条命令起全军
 node chaos-engine.mjs <ROOT>                           # 混沌演练：随机杀自己并自愈
+node publish-deploy.mjs                                # 发布部署单（绿灯/黄灯/红灯）
+node daily-cruise.mjs                                  # 每日巡航（部署单自动跑，绿灯入账）
 node experiments/fusion-experiment.mjs                 # 融合总验（统一入口六实验）
 ```
 

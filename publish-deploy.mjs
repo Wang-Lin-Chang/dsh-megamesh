@@ -6,7 +6,7 @@ import { wilsonLower } from './shadow-law.mjs'
 import { spawnSync } from 'node:child_process'
 import * as fs from 'node:fs'
 import * as path from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 
 const HERE = path.dirname(fileURLToPath(import.meta.url))
 const root = path.resolve(process.argv[2] ?? HERE)   // 默认 = 脚本所在项目根（HERE 已是根，勿再加 ..）
@@ -64,19 +64,27 @@ export function pickCriteria(scan) {
   return { best, note: `最早稳定达标：nMin=${best.nMin}, epsilon=${best.epsilon}（第 ${best.firstAt} 条记录起）` }
 }
 
-// 关 3：资格（用扫描出的最优参数评当前资格）
-const ledger = new PublishLedger(root)
-const scan = scanCriteria(ledger)
-const picked = pickCriteria(scan)
-const autonomy = picked.best
-  ? { ...ledger.eligibility({ nMin: picked.best.nMin, epsilon: picked.best.epsilon }), criteria: picked.best }
-  : ledger.eligibility()
+// 部署单主函数（可复用：CLI 与每日巡航共用）
+export function runDeploy(root) {
+  const report = { at: Date.now(), root, checks, criteria: null, autonomy: null, advice: null }
+  const scan = scanCriteria(new PublishLedger(root))
+  const picked = pickCriteria(scan)
+  const ledger = new PublishLedger(root)
+  report.criteria = picked
+  report.autonomy = picked.best
+    ? { ...ledger.eligibility({ nMin: picked.best.nMin, epsilon: picked.best.epsilon }), criteria: picked.best }
+    : ledger.eligibility()
+  report.advice = checks.words + checks.tests + checks.preflight > 0
+    ? { level: 'red', action: 'hold', note: [wordHits[0], checks.tests && '测试红', checks.preflight && '总检红'].filter(Boolean).join('；') }
+    : report.autonomy.eligible
+      ? { level: 'green', action: 'publish', note: '三关全绿 + 自治资格达标（绿灯：人一键放行）' }
+      : { level: 'yellow', action: 'review', note: `三关全绿但自治资格未达标（${report.autonomy.reason}）——需人工复核` }
+  return report
+}
 
-const advice = checks.words + checks.tests + checks.preflight > 0
-  ? { level: 'red', action: 'hold', note: [wordHits[0], checks.tests && '测试红', checks.preflight && '总检红'].filter(Boolean).join('；') }
-  : autonomy.eligible
-    ? { level: 'green', action: 'publish', note: '三关全绿 + 自治资格达标（绿灯：人一键放行）' }
-    : { level: 'yellow', action: 'review', note: `三关全绿但自治资格未达标（${autonomy.reason}）——需人工复核` }
-
-console.log(JSON.stringify({ at: Date.now(), root, checks, criteria: picked, autonomy, advice }, null, 2))
-process.exit(advice.level === 'red' ? 1 : 0)
+const isMain = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href
+if (isMain) {
+  const r = runDeploy(root)
+  console.log(JSON.stringify(r, null, 2))
+  process.exit(r.advice.level === 'red' ? 1 : 0)
+}
