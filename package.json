@@ -1,0 +1,36 @@
+{
+  "name": "dsh-megamesh",
+  "version": "0.1.0-dev",
+  "description": "Super multi-agent architecture: files are messages, adoption replaces all-hands-on-deck failure, term leases replace single points, invariants replace trust, timelines replace non-reproducibility, one file serves humans and machines. Every claim carries an experiment number.",
+  "type": "module",
+  "files": [
+    "*.mjs",
+    "experiments/*.mjs",
+    "adapters/*",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node experiments/mesh-test.mjs",
+    "hello": "node hello-megamesh.mjs"
+  },
+  "keywords": [
+    "multi-agent",
+    "mesh",
+    "fault-isolation",
+    "event-sourcing",
+    "timeline",
+    "human-machine",
+    "dsh",
+    "deepseek-harness"
+  ],
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=22.6"
+  },
+  "author": "Wang-Lin-Chang",
+  "devDependencies": {
+    "@langchain/core": "^1.2.8",
+    "@langchain/langgraph": "^1.4.10"
+  }
+}
