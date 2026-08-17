@@ -7,7 +7,7 @@
 [![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](./LICENSE)
 [![ci](https://github.com/Wang-Lin-Chang/dsh-megamesh/actions/workflows/ci.yml/badge.svg)](https://github.com/Wang-Lin-Chang/dsh-megamesh/actions/workflows/ci.yml)
 
-**每个声称带实验编号**：`experiments/` 下 34 个实验装置（E01–E34），全部真进程实测，对照组说话。
+**每个声称带实验编号**：`experiments/` 下 35 个实验装置（E01–E35），全部真进程实测，对照组说话。
 
 ## 实验编目 / Experiment index
 
@@ -47,6 +47,7 @@
 | E32 | federal-review-experiment | 质证复核轮：否决后重采样再投票，两次一致才定案 |
 | E33 | alpha-drift-experiment | α 账本滑动更新：三轮实测漂移，三策略留一验证（N=3 判别力不足如实标注）|
 | E34 | catch-review-experiment | D3 空 catch 复核：程序化分类豁免 vs 债，真债记日志 |
+| E35 | dialogue-narrative-experiment | 叙事-对话融合：锚点对账 × 14 不变量（跨仓库，本地实测）|
 
 ## 一条命令起全军 / One command, one army
 
