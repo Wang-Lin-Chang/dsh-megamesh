@@ -130,6 +130,21 @@ function checkVersion(repo) {
 
 const CHECK = { words: checkWords, ci: checkCi, drift: checkDrift, version: checkVersion }
 
+// 一次性陷阱协议（E30 偶发失败注入测试钩子）：AUDIT_ONESHOT_TRAP 指向文件，内容 "repo/check"
+// 检查前若匹配则删除该文件并返回失败（一次性）——模拟偶发失败，验证复核轮翻转
+function consumeOneshotTrap(repo, check) {
+  const trapFile = process.env.AUDIT_ONESHOT_TRAP
+  if (!trapFile || !fs.existsSync(trapFile)) return null
+  try {
+    const content = fs.readFileSync(trapFile, 'utf-8').trim()
+    if (content === `${repo}/${check}`) {
+      fs.unlinkSync(trapFile)
+      return { passed: false, evidence: 'oneshot-trap (simulated transient failure)' }
+    }
+  } catch { return null }
+  return null
+}
+
 async function work() {
   for (;;) {
     const tasks = mesh.pending().filter(t => Number(t) % totalShards === shard)
@@ -140,9 +155,12 @@ async function work() {
     const payload = JSON.parse(fs.readFileSync(path.join(mesh.root, 'intent-queue', `task-${task}.json`), 'utf-8')).payload
     log(`claimed ${task} ${payload.repo}/${payload.check}`)
     const fn = CHECK[payload.check]
-    const result = fn ? fn(payload.repo) : { passed: false, evidence: `unknown check ${payload.check}` }
-    const report = { agentId: scoutId, taskId: task, at: Date.now(), repo: payload.repo, check: payload.check, passed: result.passed, evidence: result.evidence, results: [{ repo: payload.repo, check: payload.check, passed: result.passed, evidence: result.evidence }] }
-    fs.writeFileSync(path.join(mesh.root, 'shared', 'reports', `audit-batch-${task}.json`), JSON.stringify({ agentId: scoutId, taskId: task, at: Date.now(), batch: [payload], passedCount: result.passed ? 1 : 0, total: 1, allPassed: result.passed, results: report.results, evidence: result.evidence }))
+    const trap = consumeOneshotTrap(payload.repo, payload.check)
+    const result = trap ?? (fn ? fn(payload.repo) : { passed: false, evidence: `unknown check ${payload.check}` })
+    // 审计域战报补 severity 语义（E30）：质证需要 keyNumbers 做自洽/离群检测——失败=高严重度
+    const severity = result.passed ? 1 : 90
+    const report = { agentId: scoutId, taskId: task, at: Date.now(), repo: payload.repo, check: payload.check, verify: payload.verify === true, passed: result.passed, evidence: result.evidence, keyNumbers: { severity }, summary: `${payload.repo}/${payload.check}: ${result.evidence}`, results: [{ repo: payload.repo, check: payload.check, passed: result.passed, evidence: result.evidence }] }
+    fs.writeFileSync(path.join(mesh.root, 'shared', 'reports', `audit-batch-${task}.json`), JSON.stringify({ agentId: scoutId, taskId: task, at: Date.now(), repo: payload.repo, check: payload.check, verify: payload.verify === true, batch: [payload], passedCount: result.passed ? 1 : 0, total: 1, allPassed: result.passed, results: report.results, evidence: result.evidence, keyNumbers: { severity }, summary: report.summary }))
     mesh.finish(task, JSON.stringify(report))
     mesh.release(task)
     held.delete(task)

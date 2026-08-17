@@ -28,6 +28,7 @@ export function crosscheckConsistency(report) {
 }
 
 // 质证 B：离群——MAD（中位数绝对偏差）稳健检测，假阳性极端 severity 是离群值
+// 样本同值（MAD=0）时离群检测无统计意义：全体一致下的"唯一不同"不能靠统计判定——交给复核轮（审计域）
 export function crosscheckOutlier(report, allReports) {
   const sevs = allReports.map(r => r.keyNumbers?.severity).filter(v => v !== undefined && v !== null)
   if (sevs.length < 3) return { trust: true, reason: 'too-few-samples' }
@@ -37,6 +38,8 @@ export function crosscheckOutlier(report, allReports) {
   const mad = mads[Math.floor(mads.length / 2)] || 1
   const sev = report.keyNumbers?.severity ?? null
   if (sev === null) return { trust: true, reason: 'no-severity' }
+  if (mad === 0 && sev === med) return { trust: true, reason: 'uniform-consistent' }
+  if (mad === 0 && sev !== med) return { trust: true, reason: 'uniform-no-baseline (defer to review round)' }   // 全体一致时统计无基线——不误拦，交复核
   const z = Math.abs(sev - med) / (1.4826 * mad)   // 修正 MAD → 稳健 z 分数
   return z > 3.5 ? { trust: false, reason: `severity ${sev} is ${z.toFixed(1)}σ from median ${med}` } : { trust: true, reason: `within ${z.toFixed(1)}σ` }
 }

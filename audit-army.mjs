@@ -45,16 +45,38 @@ for (let i = 0; i < 3000; i++) {
 const reports = fs.readdirSync(path.join(ROOT, 'shared', 'reports')).filter(f => f.startsWith('audit-batch-')).map(f => JSON.parse(fs.readFileSync(path.join(ROOT, 'shared', 'reports', f), 'utf-8')))
 const flat = reports.flatMap(r => r.results)
 const fails = flat.filter(x => !x.passed)
+
+// 复核轮（E30 审计域质证）：失败项由不同侦察兵独立重查（换 shard 保证不同兵），双败才定案
+let review = []
+if (fails.length > 0) {
+  for (let i = 0; i < fails.length; i++) {
+    mesh.enqueue(2000 + i + 1, { ...fails[i], verify: true })   // +1 偏移保证 shard ≠ 首圈（不同侦察兵）
+  }
+  const reviewCount = () => fs.readdirSync(path.join(ROOT, 'done')).filter(f => f.endsWith('.json') && !f.includes('.result.')).length
+  for (let i = 0; i < 900; i++) {
+    if (reviewCount() >= tasks.length + fails.length) break
+    await sleep(200)
+  }
+  const allReports = fs.readdirSync(path.join(ROOT, 'shared', 'reports')).filter(f => f.startsWith('audit-batch-')).map(f => JSON.parse(fs.readFileSync(path.join(ROOT, 'shared', 'reports', f), 'utf-8')))
+  review = fails.map(f => {
+    const r = allReports.find(x => x.verify && x.repo === f.repo && x.check === f.check)
+    const confirmed = r ? !r.allPassed : false
+    return { ...f, reviewed: r ? r.allPassed : null, confirmed }
+  })
+}
+const finalFails = review.length > 0 ? review.filter(r => r.confirmed) : fails
+const flipped = review.filter(r => !r.confirmed)
 const elapsedMs = Date.now() - t0
 
 console.log(JSON.stringify({
   by: 'audit-army', at: Date.now(), N, repos: REPOS.length, tasks: tasks.length,
-  scouts: N, elapsedMs, passed: flat.length - fails.length, failed: fails.length,
-  fails: fails.map(x => `${x.repo}/${x.check}: ${x.evidence}`),
+  scouts: N, elapsedMs, passed: flat.length - fails.length, failed: finalFails.length,
+  reviewRound: review.length > 0 ? { candidates: review.length, confirmed: finalFails.length, flipped: flipped.map(f => `${f.repo}/${f.check}`) } : null,
+  fails: finalFails.map(x => `${x.repo}/${x.check}: ${x.evidence}`),
   root: ROOT,
 }, null, 2))
 const lastRunPath = path.join(HERE, 'shared', 'consensus', 'last-audit-run.json')
-fs.writeFileSync(lastRunPath, JSON.stringify({ by: 'audit-army', at: Date.now(), N, repos: REPOS.length, tasks: tasks.length, elapsedMs, passed: flat.length - fails.length, failed: fails.length, fails: fails.map(x => ({ repo: x.repo, check: x.check, evidence: x.evidence })) }, null, 2))
+fs.writeFileSync(lastRunPath, JSON.stringify({ by: 'audit-army', at: Date.now(), N, repos: REPOS.length, tasks: tasks.length, elapsedMs, passed: flat.length - fails.length, failed: finalFails.length, reviewRound: review.length > 0 ? { candidates: review.length, confirmed: finalFails.length, flipped: flipped.map(f => ({ repo: f.repo, check: f.check })) } : null, fails: finalFails.map(x => ({ repo: x.repo, check: x.check, evidence: x.evidence })) }, null, 2))
 for (const s of scouts) { try { s.kill() } catch (e) { console.error(`scout kill failed: ${e.message}`) } }
-process.exit(fails.length === 0 ? 0 : 1)
+process.exit(finalFails.length === 0 ? 0 : 1)
 }
