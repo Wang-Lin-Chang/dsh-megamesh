@@ -7,7 +7,7 @@
 [![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](./LICENSE)
 [![ci](https://github.com/Wang-Lin-Chang/dsh-megamesh/actions/workflows/ci.yml/badge.svg)](https://github.com/Wang-Lin-Chang/dsh-megamesh/actions/workflows/ci.yml)
 
-**每个声称带实验编号**：`experiments/` 下 22 个实验装置（E01–E22），全部真进程实测，对照组说话。
+**每个声称带实验编号**：`experiments/` 下 23 个实验装置（E01–E23），全部真进程实测，对照组说话。
 
 ## 实验编目 / Experiment index
 
@@ -35,6 +35,7 @@
 | E20 | evolution-experiment | 策略进化：竞标 + 变异繁殖 + 世代迭代 |
 | E21 | unified-autonomy-experiment | 自治闭环：进化创新 + 影子把关 + 降级回退 |
 | E22 | real-deploy-experiment | 真实部署：四块自治砖接入日常发布流程 |
+| E23 | tech-debt-audit | 技术债审计：程序化债单（每项债带证据）|
 
 ## 一条命令起全军 / One command, one army
 

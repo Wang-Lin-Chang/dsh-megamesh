@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.10.0] - 2026-08-17
+
+### Fixed
+
+- D5 平台债（技术债审计 HIGH）：procStartSec 跨平台化——ESM import（修复 require 失效导致全平台 startSec 证据失效）+ linux/darwin ps 分支（修复非 Windows 三证据退化）。
+- D9 瞬态区累积债：megamesh.transientGC(maxAgeMs) 清理超龄 expand 文件。
+- D3 静默吞错债（关键路径）：mesh-core release/sweep/dead-letter 的 catch 记入事件日志（agents/mesh-events.jsonl）。
+
+### Added
+
+- 技术债审计（tech-debt-audit，E23）：10 项债程序化债单（DRY/魔法数/静默吞错/忙等/平台/确定性/覆盖/版本/瞬态/双账本），每项带证据。
+- 债单台账 lab/TECH-DEBT.md（复核清单 + 修复记录）。
+
 ## [0.9.0] - 2026-08-17
 
 ### Added

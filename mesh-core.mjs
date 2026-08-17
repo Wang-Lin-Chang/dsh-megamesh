@@ -3,6 +3,7 @@
 // 租约超时（leaseMs）= 死循环/死锁检测；心跳=锁 mtime touch（witness 同款观测式心跳）
 import * as fs from 'node:fs'
 import * as path from 'node:path'
+import { execFileSync } from 'node:child_process'
 
 export class MeshCore {
   constructor(root, { leaseMs = 3000, heartbeatMs = 800 } = {}) {
@@ -50,11 +51,18 @@ export class MeshCore {
   release(taskId) {
     const p = path.join(this.root, 'intent-queue', `task-${taskId}.lock`)
     for (let i = 0; i < 5; i++) {
-      try { fs.unlinkSync(p); return true } catch {}
+      try { fs.unlinkSync(p); return true } catch (e) { this.logEvent('release-retry', { taskId, attempt: i + 1, code: e.code }) }
       const end = Date.now() + 20   // 忙等 20ms 重试（Windows 共享冲突瞬态）
       while (Date.now() < end) {}
     }
     return false
+  }
+
+  // 事件日志：关键路径的 catch 不再静默（D3 静默吞错债修复）——agents/mesh-events.jsonl
+  logEvent(type, data) {
+    try {
+      fs.appendFileSync(path.join(this.root, 'agents', 'mesh-events.jsonl'), JSON.stringify({ at: Date.now(), type, ...data }) + '\n')
+    } catch {}
   }
 
   // ---------- 完成：任务 → done ----------
@@ -70,9 +78,14 @@ export class MeshCore {
   }
   procStartSec(pid) {
     try {
-      const { execFileSync } = require('node:child_process')
-      const out = execFileSync('powershell', ['-NoProfile', '-Command', `[int](Get-Date -Date (Get-Process -Id ${pid}).StartTime.ToUniversalTime() -UFormat %s)`], { timeout: 5000, windowsHide: true, stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim()
-      const t = Number(out)
+      if (process.platform === 'win32') {
+        const out = execFileSync('powershell', ['-NoProfile', '-Command', `[int](Get-Date -Date (Get-Process -Id ${pid}).StartTime.ToUniversalTime() -UFormat %s)`], { timeout: 5000, windowsHide: true, stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim()
+        const t = Number(out)
+        return Number.isFinite(t) && t > 0 ? t : undefined
+      }
+      // linux / darwin：ps -o lstart=（跨平台三证据，修复 ESM require 失效 + 非 Windows 退化）
+      const out = execFileSync('ps', ['-p', String(pid), '-o', 'lstart='], { timeout: 5000, stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim()
+      const t = Math.floor(Date.parse(out) / 1000)
       return Number.isFinite(t) && t > 0 ? t : undefined
     } catch { return undefined }
   }
@@ -99,15 +112,15 @@ export class MeshCore {
       if (dead || stale) {
         // 假阳性防护：任务已完成而锁残留（release 曾失败）——不是死循环/死锁，只清残留锁，不进 dead-letter
         if (!dead && fs.existsSync(path.join(this.root, 'done', `task-${taskId}.json`))) {
-          try { fs.unlinkSync(path.join(this.root, 'intent-queue', `task-${taskId}.lock`)) } catch {}
+          try { fs.unlinkSync(path.join(this.root, 'intent-queue', `task-${taskId}.lock`)) } catch (e) { this.logEvent('sweep-clean-fail', { taskId, code: e.code }) }
           adopted.push({ taskId, agentId, reason: 'lock-residue (任务已完成，清理残留锁)' })
           continue
         }
         // 任务移 dead-letter（保存现场）→ 重新入队（新实例可收养）
         const dl = path.join(this.root, 'shared/dead-letter', `task-${taskId}.json`)
         const src = path.join(this.root, 'intent-queue', `task-${taskId}.json`)
-        try { fs.copyFileSync(src, dl) } catch {}
-        try { fs.unlinkSync(path.join(this.root, 'intent-queue', `task-${taskId}.lock`)) } catch {}
+        try { fs.copyFileSync(src, dl) } catch (e) { this.logEvent('dead-letter-copy-fail', { taskId, code: e.code }) }
+        try { fs.unlinkSync(path.join(this.root, 'intent-queue', `task-${taskId}.lock`)) } catch (e) { this.logEvent('sweep-unlink-fail', { taskId, code: e.code }) }
         adopted.push({ taskId, agentId, reason: stale && !dead ? 'lease-timeout (死循环/死锁)' : dead ? 'agent-dead (三证据)' : 'unknown' })
       }
     }

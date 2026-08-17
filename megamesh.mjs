@@ -58,6 +58,22 @@ export class MegaMesh {
   // 影子法庭：自治军法的边界（Wilson 转正判据 + promote/demote 可回退）
   shadowCourt() { return new ShadowCourt(this.root) }
 
+  // 瞬态区 GC：清理超龄 expand-reqs/resps（D9 瞬态区累积债修复）
+  transientGC(maxAgeMs = 3600_000) {
+    let cleaned = 0
+    for (const d of ['shared/expand-reqs', 'shared/expand-resps']) {
+      const dir = path.join(this.root, d)
+      if (!fs.existsSync(dir)) continue
+      for (const f of fs.readdirSync(dir)) {
+        const p = path.join(dir, f)
+        try {
+          if (Date.now() - fs.statSync(p).mtimeMs > maxAgeMs) { fs.unlinkSync(p); cleaned++ }
+        } catch {}
+      }
+    }
+    return cleaned
+  }
+
   // ---------- 任期（联邦） ----------
   term() {
     try {
