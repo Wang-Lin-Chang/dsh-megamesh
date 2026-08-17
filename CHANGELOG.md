@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.24.0] - 2026-08-17
+
+### Changed
+
+- ARENA 推理竞技场独立成库 [dsh-arena](https://github.com/Wang-Lin-Chang/dsh-arena)（E40/E41 迁移为该库 E01/E02）——模型推理框架与多 Agent 框架分库，各守其域。dsh-megamesh 回归 39 装置（E01–E39）。
+
 ## [0.23.0] - 2026-08-17
 
 ### Added
