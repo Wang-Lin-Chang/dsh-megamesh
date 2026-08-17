@@ -7,7 +7,7 @@
 [![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](./LICENSE)
 [![ci](https://github.com/Wang-Lin-Chang/dsh-megamesh/actions/workflows/ci.yml/badge.svg)](https://github.com/Wang-Lin-Chang/dsh-megamesh/actions/workflows/ci.yml)
 
-**每个声称带实验编号**：`experiments/` 下 36 个实验装置（E01–E36），全部真进程实测，对照组说话。
+**每个声称带实验编号**：`experiments/` 下 37 个实验装置（E01–E37），全部真进程实测，对照组说话。
 
 ## 实验编目 / Experiment index
 
@@ -49,6 +49,7 @@
 | E34 | catch-review-experiment | D3 空 catch 复核：程序化分类豁免 vs 债，真债记日志 |
 | E35 | dialogue-narrative-experiment | 叙事-对话融合：锚点对账 × 14 不变量（跨仓库，本地实测）|
 | E36 | meta-audit-experiment | 元审计军：三独立实现交叉审计 + 盲区注入 + 分歧账本 |
+| E37 | adapter-evolver-experiment | 框架自动适配进化器：扫描生成骨架 + 影子法庭转正 + 元契约 |
 
 ## 一条命令起全军 / One command, one army
 

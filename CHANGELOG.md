@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.19.0] - 2026-08-17
+
+### Added
+
+- 框架自动适配进化器（E37，预言三落地）：质疑"每个框架雇一个人手写 adapter"的主流现状——adapter-evolver 自动扫描框架 npm 包（package.json 入口 + 动态 import 导出面）→ 元契约 PRIMITIVE_MAP（框架自述语言 → 协议语言）识别等价原语 → 生成 5 函数契约骨架（识别接线 + 未识别诚实标记"待人工确认"，不冒充可执行）→ 影子法庭 Wilson 转正判据复用（20 次影子运行零误杀才转正，E16/E17 判据）。E12 真库数据喂料：LangGraph 扫描 94 导出识别 Graph/StateGraph 原语，CrewAI 未安装诚实降级报告。
+
 ## [0.18.0] - 2026-08-17
 
 ### Added
