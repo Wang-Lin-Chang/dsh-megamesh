@@ -31,11 +31,14 @@ let flipOk = false
     const r = spawnSync(process.execPath, ['audit-army.mjs', '4'], { cwd: PROJECT, stdio: 'ignore', windowsHide: true, timeout: 600000, env: { ...process.env, AUDIT_ONESHOT_TRAP: trapFile } })
     const last = JSON.parse(fs.readFileSync(lastAuditPath, 'utf-8'))
     const review = last.reviewRound
-    // 翻转语义：首圈陷阱失败进复核轮（candidates>0）→ 重查通过（flipped>0）→ 最终零失败（failed=0）
-    flipOk = (review?.candidates ?? 0) > 0 && (review?.flipped?.length ?? 0) > 0 && (last.failed ?? -1) === 0
+    // 翻转语义：注入的陷阱（dsh-mesh/version）首圈必抓 → 复核轮必须把它翻转（不同侦察兵重查通过）
+    // 注意：实验期间可能有其他真实失败（如本地未推送文件的漂移），复核轮应确认它们——两者行为都是对的
+    const trapFlipped = (review?.flipped ?? []).some(f => typeof f === 'string' ? f === 'dsh-mesh/version' : f.repo === 'dsh-mesh' && f.check === 'version')
+    const trapCaughtFirst = (review?.candidates ?? 0) > 0
+    flipOk = trapCaughtFirst && trapFlipped
     say(flipOk
-      ? C.green + `   ✓ 首圈抓 ${review.candidates} 个候选失败 → 复核轮翻转 ${review.flipped.length} 个 → 最终 ${last.failed} 失败（偶发过滤生效）` + C.reset
-      : C.yellow + `   ⚠ 偶发失败未按预期翻转（failed=${last.failed} candidates=${review?.candidates ?? 0} flipped=${review?.flipped?.length ?? 0}）` + C.reset)
+      ? C.green + `   ✓ 首圈抓 ${review.candidates} 个候选 → 陷阱被复核轮翻转（flipped=${review.flipped.length}）→ 偶发过滤生效` + C.reset
+      : C.yellow + `   ⚠ 陷阱未按预期翻转（candidates=${review?.candidates ?? 0} flipped=${(review?.flipped ?? []).length}）` + C.reset)
   } finally {
     if (fs.existsSync(trapFile)) fs.unlinkSync(trapFile)   // 恢复
     say(C.dim + '   已清理一次性陷阱' + C.reset)
