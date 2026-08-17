@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.12.1] - 2026-08-17
+
+### Fixed
+
+- 词检数据源随仓库与随包：lab/bad-words.json 从未进 GitHub 仓库（push 脚本排除 lab 目录）与 npm 包（files 白名单缺它），CI 三平台全红（ENOENT）而本地绿——被"本地有 lab"掩盖的发布债。修复：push 只收 lab/bad-words.json（lab 内部叙事文档仍不公开）+ npm files 加 lab/bad-words.json。
+- v0.12.0 宣传帖"CI 三平台绿"声明错误（发帖时 CI 实为红）——0.12.1 修复后另行发纠错帖。
+
 ## [0.12.0] - 2026-08-17
 
 ### Added
