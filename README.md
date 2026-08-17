@@ -7,7 +7,7 @@
 [![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](./LICENSE)
 [![ci](https://github.com/Wang-Lin-Chang/dsh-megamesh/actions/workflows/ci.yml/badge.svg)](https://github.com/Wang-Lin-Chang/dsh-megamesh/actions/workflows/ci.yml)
 
-**每个声称带实验编号**：`experiments/` 下 16 个实验装置（E01–E16），全部真进程实测，对照组说话。
+**每个声称带实验编号**：`experiments/` 下 17 个实验装置（E01–E17），全部真进程实测，对照组说话。
 
 ## 实验编目 / Experiment index
 
@@ -29,6 +29,7 @@
 | E14 | forensic-sweep | 收养取证（sweep 时刻锁态）|
 | E15 | preflight-experiment | 发布前总检（词检/依赖图/声称核对/清单）|
 | E16 | shadow-experiment | 影子法庭：Wilson 转正判据 + promote/demote 闭环 |
+| E17 | auto-publish-experiment | 自治发布判据：发布决策器影子转正 + 人工介入对照 |
 
 ## 一条命令起全军 / One command, one army
 
