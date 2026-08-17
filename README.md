@@ -7,7 +7,7 @@
 [![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](./LICENSE)
 [![ci](https://github.com/Wang-Lin-Chang/dsh-megamesh/actions/workflows/ci.yml/badge.svg)](https://github.com/Wang-Lin-Chang/dsh-megamesh/actions/workflows/ci.yml)
 
-**每个声称带实验编号**：`experiments/` 下 19 个实验装置（E01–E19），全部真进程实测，对照组说话。
+**每个声称带实验编号**：`experiments/` 下 20 个实验装置（E01–E20），全部真进程实测，对照组说话。
 
 ## 实验编目 / Experiment index
 
@@ -32,6 +32,7 @@
 | E17 | auto-publish-experiment | 自治发布判据：发布决策器影子转正 + 人工介入对照 |
 | E18 | real-autopublish-experiment | 真实发布账本：判据吃真历史 + 预检单落地 |
 | E19 | branch-search-experiment | 平行宇宙策略竞标：候选重演 Pareto 选优 |
+| E20 | evolution-experiment | 策略进化：竞标 + 变异繁殖 + 世代迭代 |
 
 ## 一条命令起全军 / One command, one army
 
