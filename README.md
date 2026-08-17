@@ -5,6 +5,7 @@
 > A super multi-agent architecture: files are messages, adoption replaces all-hands-on-deck failure, term leases replace single points, invariants replace trust, timelines replace non-reproducibility, and one file serves both humans and machines.
 
 [![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](./LICENSE)
+[![ci](https://github.com/Wang-Lin-Chang/dsh-megamesh/actions/workflows/ci.yml/badge.svg)](https://github.com/Wang-Lin-Chang/dsh-megamesh/actions/workflows/ci.yml)
 
 **每个声称带实验编号**：`experiments/` 下 15 个实验装置（E01–E15），全部真进程实测，对照组说话。
 
