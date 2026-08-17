@@ -56,7 +56,7 @@ for (const h of ledger.history()) expLedger.record(h)
   say('')
   say(C.cyan + '═ EXP-3 对照：默认参数 (20, 0.01) vs 扫描最优 ═' + C.reset)
   const def = scanCriteria(expLedger, [20], [0.01])[0]
-  const best = pickCriteria(scan).best
+  const best = pickCriteria(scanCriteria(expLedger)).best   // scan 在 EXP-2 块作用域内——此处重算（回归军抓出的块作用域 bug）
   const win = best.firstAt <= def.firstAt
   say(C.green + `   ✓ 默认 (20, 0.01)：第 ${def.firstAt} 条达标 · 扫描最优 (${best.nMin}, ${best.epsilon})：第 ${best.firstAt} 条达标 → 扫描最优${win ? '更早或持平 ✓（数据定优劣）' : '更晚 ✗'}` + C.reset)
 }

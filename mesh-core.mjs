@@ -105,7 +105,8 @@ export class MeshCore {
       let dead = !this.isAgentAlive(pid)
       if (!dead) {
         const cur = this.procStartSec(pid)
-        if (cur !== undefined && cur !== Number(startSecStr)) dead = true   // PID 复用
+        // 跨来源时间比对带 ±1s 容差：powershell [int] 四舍五入 vs JS floor——进程启动于 x.7 秒时两者差 1，严格不等会误判 PID 复用（mesh-test 间歇红根因）
+        if (cur !== undefined && Math.abs(cur - Number(startSecStr)) > 1) dead = true   // PID 复用
       }
       let stale = false
       try { stale = this.lockAgeMs(taskId) > this.leaseMs } catch { continue }   // TOCTOU 防护：stat 失败=锁刚被释放 → 跳过

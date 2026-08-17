@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.12.0] - 2026-08-17
+
+### Added
+
+- 回归军（regression-army + regression-scout）：22 个实验装置的回归跑由侦察兵分片执行 + 联邦脑决策，真实耗时账本落盘（shared/consensus/regression-times.json）。
+- regression-army-experiment（E25）：平行宇宙竞标/进化接管真实分兵参数——竞标用真实耗时重演 makespan 定分兵，进化全域探索暴露纯 makespan 模型盲区（无并行惩罚项 → 盲目收敛全并行）。
+
+### Fixed
+
+- mesh-core 收养判定跨来源时间比对 ±1s 容差：powershell [int] 四舍五入 vs JS floor 在进程启动于 x.7 秒时差 1 → 活进程被误判 PID 复用 → mesh-test 间歇红（回归军 N=2 实跑暴露）。
+- real-deploy-experiment（E22）EXP-3 块级 ReferenceError（scan 未定义）——回归军首跑暴露，修复为块内重算 scanCriteria(expLedger)。
+- 并行惩罚装置防护：22 兵全并行实测拖垮重装置（time/tier 超时），分兵可行域由实测约束定出；回归结果取证落盘 last-regression-run.json（无 pipe 环境）。
+
 ## [0.11.0] - 2026-08-17
 
 ### Added
