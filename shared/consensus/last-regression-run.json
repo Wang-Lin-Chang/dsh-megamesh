@@ -1,9 +1,11 @@
 {
   "by": "regression-army",
-  "at": 1786982419281,
-  "N": 2,
-  "batches": 2,
-  "elapsedMs": 144401,
+  "at": 1786984783856,
+  "requestedN": "3",
+  "effectiveN": 3,
+  "shardSource": null,
+  "batches": 3,
+  "elapsedMs": 146322,
   "allPassed": true,
   "failing": []
 }
