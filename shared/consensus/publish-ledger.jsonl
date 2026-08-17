@@ -1,0 +1,20 @@
+{"at":1786963204887,"version":"dsh-witness@0.1.0","checks":{"words":0,"tests":0,"preflight":0},"outcome":"success"}
+{"at":1786963204888,"version":"dsh-anchor@0.1.0","checks":{"words":0,"tests":0,"preflight":0},"outcome":"success"}
+{"at":1786963204888,"version":"dsh-cross-platform@0.1.0","checks":{"words":0,"tests":0,"preflight":0},"outcome":"success"}
+{"at":1786963204888,"version":"dsh-macos@0.1.0","checks":{"words":0,"tests":0,"preflight":0},"outcome":"success"}
+{"at":1786963204888,"version":"schedule-core@0.1.0","checks":{"words":0,"tests":0,"preflight":0},"outcome":"success"}
+{"at":1786963204889,"version":"dsh-schedule@0.1.0","checks":{"words":0,"tests":0,"preflight":0},"outcome":"success"}
+{"at":1786963204889,"version":"agent-runner-mcp@0.1.0","checks":{"words":0,"tests":0,"preflight":0},"outcome":"success"}
+{"at":1786963204889,"version":"dsh-witness@0.2.0","checks":{"words":0,"tests":0,"preflight":0},"outcome":"success"}
+{"at":1786963204889,"version":"dsh-anchor@0.2.0","checks":{"words":0,"tests":0,"preflight":0},"outcome":"success"}
+{"at":1786963204889,"version":"dsh-mesh@0.1.0","checks":{"words":0,"tests":0,"preflight":0},"outcome":"success"}
+{"at":1786963204890,"version":"dsh-mesh@0.2.0","checks":{"words":0,"tests":0,"preflight":0},"outcome":"success"}
+{"at":1786963204890,"version":"dsh-mesh@0.3.0","checks":{"words":0,"tests":0,"preflight":0},"outcome":"accident","note":"post-release self-audit found sweep false-positive diagnosis chain (fixed in 0.3.1)"}
+{"at":1786963204890,"version":"dsh-mesh@0.3.1","checks":{"words":0,"tests":0,"preflight":0},"outcome":"success"}
+{"at":1786963204890,"version":"dsh-megamesh@0.1.0","checks":{"words":0,"tests":0,"preflight":0},"outcome":"success"}
+{"at":1786963204890,"version":"dsh-megamesh@0.2.0","checks":{"words":0,"tests":0,"preflight":0},"outcome":"success"}
+{"at":1786963204890,"version":"dsh-megamesh@0.3.0","checks":{"words":0,"tests":0,"preflight":0},"outcome":"success"}
+{"at":1786963204890,"version":"dsh-story@0.1.0-scoped","checks":{"words":0,"tests":0,"preflight":0},"outcome":"success"}
+{"at":1786963204890,"version":"schedule-core@0.1.0-scoped","checks":{"words":0,"tests":0,"preflight":0},"outcome":"success"}
+{"at":1786963204891,"version":"dsh-schedule@npm","checks":{"words":0,"tests":0,"preflight":0},"outcome":"success"}
+{"at":1786963204891,"version":"agent-runner-mcp@npm","checks":{"words":0,"tests":0,"preflight":0},"outcome":"success"}

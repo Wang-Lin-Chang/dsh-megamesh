@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.4.0] - 2026-08-17
+
+### Added
+
+- 发布账本（publish-ledger）：append-only 真实发布史 + Wilson 自治资格判据（可预见事故率 vs 不可预见事故的诚实区分）。
+- 发布预检单（publish-preflight）：词检/测试/总检三关 + 账本资格——每次发布的第一道程序化关口。
+- real-autopublish-experiment（E18）：判据吃 20 条真实发布史（含 1 条真实事故），预检单实测落地。
+- 正式发布账本 seed：20 条真实发布记录（含 dsh-mesh v0.3.0 事故如实入账）。
+
 ## [0.3.0] - 2026-08-17
 
 ### Added
