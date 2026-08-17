@@ -3,6 +3,7 @@
 // 主席每轮心跳 touch 锁；候补发现租约过期 → 判死 → O_EXCL 抢锁 → 新任期
 // 决策文书 shared/consensus/decrees/decree-<term>.json（覆盖写，最新即有效）
 // 多方质证（E28）：chair 提议（max severity）→ 自洽 + 离群双质证投票 → unanimous 放行 / contested/vetoed 不放行
+// 质证复核轮（E32）：contested/vetoed 后重采样再投票，两次一致才定案——否决不是终点，是复核起点
 // argv: <meshRoot> <brainId>
 import * as fs from 'node:fs'
 import * as path from 'node:path'
@@ -12,6 +13,7 @@ const [root, brainId] = process.argv.slice(2)
 const LEASE_MS = 1500
 const POLL_MS = 150
 const DECREE_MIN_GAP_MS = 250
+const REVIEW_GAP_MS = 800   // 复核轮重采样间隔：等新一批战报（独立样本）
 const termPath = path.join(root, 'shared', 'consensus', 'term.lock')
 const decreesDir = path.join(root, 'shared', 'consensus', 'decrees')
 fs.mkdirSync(decreesDir, { recursive: true })
@@ -64,6 +66,7 @@ function processReports() {
 async function run() {
   let myTerm = null
   let lastDecreeAt = 0
+  let lastReviewAt = 0
   for (;;) {
     const owner = parseTerm()
     if (owner === null) {
@@ -80,10 +83,28 @@ async function run() {
         if (!blocked) {
           fs.writeFileSync(path.join(decreesDir, `decree-${myTerm}.json`), JSON.stringify({ term: myTerm, chair: brainId, at: Date.now(), ...r }))
           lastDecreeAt = Date.now()
+          lastReviewAt = 0
+        } else if (Date.now() - lastReviewAt >= REVIEW_GAP_MS) {
+          // 质证复核轮（E32）：否决后等新一批战报（重采样）再投票——两次一致才定案
+          lastReviewAt = Date.now()
+          log(`court blocked decree (round 1): ${r.court.status} agree=${r.court.agree}/3 -> schedule review`)
+          await sleep(REVIEW_GAP_MS)   // 重采样窗口：新战报流入
+          const r2 = processReports()
+          if (r2 !== null) {
+            const blocked2 = r2.court && (r2.court.status === 'vetoed' || r2.court.status === 'contested-high-risk')
+            if (!blocked2) {
+              // 复核轮翻转：噪声已消失 → 放行（E32 EXP-2 实测语义）
+              fs.writeFileSync(path.join(decreesDir, `decree-${myTerm}.json`), JSON.stringify({ term: myTerm, chair: brainId, at: Date.now(), review: 'flipped-release', ...r2 }))
+              lastDecreeAt = Date.now()
+              log(`review flipped to release`)
+            } else {
+              // 两次一致否决 → 定案（E32 EXP-3 实测语义）
+              fs.writeFileSync(path.join(decreesDir, `contested-${myTerm}-${Date.now()}.json`), JSON.stringify({ term: myTerm, chair: brainId, at: Date.now(), review: 'confirmed', court: r2.court, verdict: r2.verdict }))
+              log(`review confirmed block: ${r2.court.status} agree=${r2.court.agree}/3`)
+            }
+          }
         } else {
-          // 质证拦截：decree 不放行，分歧记录落盘（可审计）
           fs.writeFileSync(path.join(decreesDir, `contested-${myTerm}-${Date.now()}.json`), JSON.stringify({ term: myTerm, chair: brainId, at: Date.now(), court: r.court, verdict: r.verdict }))
-          log(`court blocked decree: ${r.court.status} agree=${r.court.agree}/3`)
         }
       }
       await sleep(POLL_MS)

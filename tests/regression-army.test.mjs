@@ -12,6 +12,7 @@ test('驱动器不入装置清单（递归防护）', () => {
   assert.ok(src.includes("'audit-army-experiment.mjs'"), 'EXPERIMENTS 应排除 E27 驱动器')
   assert.ok(src.includes("'scheduler-command-experiment.mjs'"), 'EXPERIMENTS 应排除 E29 驱动器')
   assert.ok(src.includes("'dual-army-deploy-experiment.mjs'"), 'EXPERIMENTS 应排除 E30 驱动器')
+  assert.ok(src.includes("'timeout-penalty-experiment.mjs'"), 'EXPERIMENTS 应排除 E31 驱动器')
   assert.ok(src.includes('!f.startsWith(\'ref-\')'), 'EXPERIMENTS 应排除 ref 夹具')
 })
 

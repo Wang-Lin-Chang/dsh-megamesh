@@ -35,11 +35,12 @@ export function crosscheckOutlier(report, allReports) {
   const sorted = [...sevs].sort((a, b) => a - b)
   const med = sorted[Math.floor(sorted.length / 2)]
   const mads = sorted.map(v => Math.abs(v - med)).sort((a, b) => a - b)
-  const mad = mads[Math.floor(mads.length / 2)] || 1
+  const rawMad = mads[Math.floor(mads.length / 2)]
+  const mad = rawMad || 1
   const sev = report.keyNumbers?.severity ?? null
   if (sev === null) return { trust: true, reason: 'no-severity' }
-  if (mad === 0 && sev === med) return { trust: true, reason: 'uniform-consistent' }
-  if (mad === 0 && sev !== med) return { trust: true, reason: 'uniform-no-baseline (defer to review round)' }   // 全体一致时统计无基线——不误拦，交复核
+  if (rawMad === 0 && sev === med) return { trust: true, reason: 'uniform-consistent' }
+  if (rawMad === 0 && sev !== med) return { trust: true, reason: 'uniform-no-baseline (defer to review round)' }   // 全体一致时统计无基线——不误拦，交复核
   const z = Math.abs(sev - med) / (1.4826 * mad)   // 修正 MAD → 稳健 z 分数
   return z > 3.5 ? { trust: false, reason: `severity ${sev} is ${z.toFixed(1)}σ from median ${med}` } : { trust: true, reason: `within ${z.toFixed(1)}σ` }
 }
@@ -60,4 +61,17 @@ export function courtVote(reports, { highRiskThreshold = 90 } = {}) {
   else if (agree === 2) status = highRisk ? 'contested-high-risk' : 'contested-low-risk'
   else status = 'vetoed'
   return { status, proposal, votes, agree, highRisk }
+}
+
+// 质证复核协议（E32 生产函数）：否决 → 重采样再投票 → 两次一致才定案
+// final: release（首轮放行）/ flipped-release（复核翻转=噪声过滤）/ confirmed-*（两次一致定案）/ review-divergent
+export function reviewCourt(reportsRound1, reportsRound2, { highRiskThreshold = 90 } = {}) {
+  const first = courtVote(reportsRound1, { highRiskThreshold })
+  if (first.status === 'unanimous') return { ...first, round: 1, final: 'release' }
+  if (first.status === 'no-proposal') return { ...first, round: 1, final: 'no-proposal' }
+  const second = courtVote(reportsRound2, { highRiskThreshold })
+  const final = second.status === 'unanimous'
+    ? 'flipped-release'
+    : (second.status !== 'unanimous' && first.status !== 'unanimous' ? 'confirmed-' + second.status : 'review-divergent')
+  return { first, second, final }
 }

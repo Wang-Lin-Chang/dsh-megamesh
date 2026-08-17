@@ -30,3 +30,5 @@
 {"at":1786973390967,"version":"0.12.0","checks":{"words":0,"tests":0,"preflight":0},"outcome":"accident","type":"可预见","note":"发布时未查 CI：lab/bad-words.json 不入仓库/包 → 三平台 ENOENT 全红；宣传帖误称 CI 绿"}
 {"at":1786973553919,"version":"0.12.1","checks":{"words":0,"tests":0,"preflight":0},"gate":"green","by":"publish-deploy"}
 {"at":1786982895169,"version":"0.13.0","checks":{"words":0,"tests":0,"preflight":0},"gate":"green","by":"publish-deploy"}
+{"at":1786985343999,"version":"0.14.0","checks":{"words":0,"tests":0,"preflight":0},"gate":"green","by":"publish-deploy"}
+{"at":1786988025320,"version":"0.15.0","checks":{"words":0,"tests":0,"preflight":0},"gate":"green","by":"publish-deploy"}

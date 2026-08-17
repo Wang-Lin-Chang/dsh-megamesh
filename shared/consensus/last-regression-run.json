@@ -1,11 +1,13 @@
 {
   "by": "regression-army",
-  "at": 1786984783856,
-  "requestedN": "3",
-  "effectiveN": 3,
+  "at": 1786987982236,
+  "requestedN": "2",
+  "effectiveN": 2,
   "shardSource": null,
-  "batches": 3,
-  "elapsedMs": 146322,
-  "allPassed": true,
-  "failing": []
+  "batches": 2,
+  "elapsedMs": 144957,
+  "allPassed": false,
+  "failing": [
+    "tech-debt-audit.mjs:exit3221226505"
+  ]
 }

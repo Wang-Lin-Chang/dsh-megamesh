@@ -41,7 +41,9 @@ export function pickN(experiments, times, alpha, maxN = 8) {
 }
 
 // 生产入口：读账本 → 拟合 α → 定 N（账本缺失时降级 α=0 → 等价纯 makespan，诚实记录降级）
-export function scheduleN(times, collectPath = path.join(HERE, 'shared', 'consensus', 'penalty-collect.json'), { maxN = 8 } = {}) {
+// 风险项（E31）：超时率账本存在时，riskAware(N) = penalizedMakespan × (1 + γ·r(N))——γ 由最坏档实测锚定
+// 诚实语义：当前数据超时率 0% → γ=0 → 选稳=选快；拖垮数据再现时风险项自动激活（数据说险就是险）
+export function scheduleN(times, collectPath = path.join(HERE, 'shared', 'consensus', 'penalty-collect.json'), { maxN = 8, timeoutPath = null } = {}) {
   let alpha = 0
   let degraded = false
   if (fs.existsSync(collectPath)) {
@@ -50,6 +52,31 @@ export function scheduleN(times, collectPath = path.join(HERE, 'shared', 'consen
     if (keys.length >= 2) alpha = fitAlpha(collect)
     else degraded = true
   } else degraded = true
-  const { N, mk } = pickN(EXPERIMENTS, times, alpha, maxN)
-  return { N, makespanMs: mk, alpha, degraded, source: degraded ? 'degraded(no ledger)' : 'penalty-collect.json' }
+  // 超时风险账本（E31）：timeout-collect.json，超时率 r(N) + γ
+  let gamma = 0
+  const timeoutPathResolved = timeoutPath ?? path.join(HERE, 'shared', 'consensus', 'timeout-collect.json')
+  const rates = []
+  if (fs.existsSync(timeoutPathResolved)) {
+    const tc = JSON.parse(fs.readFileSync(timeoutPathResolved, 'utf-8'))
+    const entries = Object.entries(tc).map(([n, d]) => [Number(n), d.rows.filter(r => r.exit !== 0).length / d.rows.length])
+    for (const [n, r] of entries) rates.push({ n, r })
+  }
+  const maxRate = rates.length > 0 ? Math.max(...rates.map(x => x.r)) : 0
+  gamma = maxRate > 0 ? 1 / maxRate : 0
+  const rateOf = (N) => {
+    if (rates.length === 0) return 0
+    const sorted = [...rates].sort((a, b) => a.n - b.n)
+    if (N <= sorted[0].n) return 0
+    for (let i = 0; i < sorted.length - 1; i++) {
+      if (N <= sorted[i + 1].n) return sorted[i].r + (sorted[i + 1].r - sorted[i].r) * (N - sorted[i].n) / (sorted[i + 1].n - sorted[i].n)
+    }
+    return sorted[sorted.length - 1].r
+  }
+  let best = null
+  for (let N = 1; N <= Math.min(maxN, EXPERIMENTS.length); N++) {
+    const mk = penalizedMakespan(EXPERIMENTS, times, alpha, N)
+    const risk = mk * (1 + gamma * rateOf(N))
+    if (best === null || risk < best.risk - 0.5) best = { N, mk, risk }
+  }
+  return { N: best?.N ?? 1, makespanMs: best?.mk ?? 0, riskAdjustedMs: best?.risk ?? 0, alpha, gamma, degraded, source: degraded ? 'degraded(no ledger)' : 'penalty-collect.json' }
 }
