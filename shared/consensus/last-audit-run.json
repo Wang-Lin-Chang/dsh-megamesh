@@ -1,12 +1,22 @@
 {
   "by": "audit-army",
-  "at": 1786985258048,
+  "at": 1786992038185,
   "N": 4,
   "repos": 12,
   "tasks": 48,
-  "elapsedMs": 22452,
-  "passed": 48,
-  "failed": 0,
-  "reviewRound": null,
-  "fails": []
+  "elapsedMs": 20730,
+  "passed": 47,
+  "failed": 1,
+  "reviewRound": {
+    "candidates": 1,
+    "confirmed": 1,
+    "flipped": []
+  },
+  "fails": [
+    {
+      "repo": "dsh-megamesh",
+      "check": "drift",
+      "evidence": "audit-scout.mjs;experiments/meta-audit-experiment.mjs(only-local);meta-audit.mjs(only-local)"
+    }
+  ]
 }

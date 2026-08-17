@@ -38,7 +38,7 @@ const SKIP = new Set(['node_modules', '.git', 'lab', 'dist', 'vendor', 'shared']
 
 // ---------- 体检关实现（每关返回 {passed, evidence}）----------
 
-// words：本地仓库词检（发布树口径）
+// words：本地仓库词检（发布树口径）+ F_2 独立实现交叉（E36 元审计：审计器盲区由第二实现抓）
 function checkWords(repo) {
   const dir = LOCAL[repo]
   if (!dir || !fs.existsSync(dir)) return { passed: true, evidence: 'skip(no local)' }
@@ -56,7 +56,30 @@ function checkWords(repo) {
     }
   }
   walk(dir)
-  return hits.length === 0 ? { passed: true, evidence: '0 hits' } : { passed: false, evidence: hits.slice(0, 3).join(';') }
+  // F_2 独立实现抽查（逐词 indexOf，不共享正则引擎——E36 EXP-1 基线三实现一致）
+  if (hits.length === 0) {
+    const f2Hits = []
+    const walk2 = (d) => {
+      for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+        if (SKIP.has(e.name)) continue
+        const p = path.join(d, e.name)
+        if (e.isDirectory()) walk2(p)
+        else if (/\.(mjs|js|cjs|ts|md|json|yml|py)$/.test(e.name)) {
+          const text = fs.readFileSync(p, 'utf-8')
+          for (const w of BAD_WORDS) if (text.indexOf(w) !== -1) { f2Hits.push(`${path.relative(dir, p)}:${w}`); break }
+        }
+      }
+    }
+    walk2(dir)
+    if (f2Hits.length > 0) {
+      // 元审计分歧：F_1 零命中但 F_2 抓到——审计器盲区，分歧账本落盘
+      try {
+        fs.appendFileSync(path.join(HERE, 'shared', 'consensus', 'audit-divergence.jsonl'), JSON.stringify({ at: Date.now(), repo, check: 'words', f1: '0 hits', f2: f2Hits.slice(0, 3), humanReview: 'pending' }) + '\n')
+      } catch (e) { console.error(`divergence-ledger-fail: ${e.message}`) }
+      return { passed: false, evidence: `F1=0但F2抓:${f2Hits.slice(0, 2).join(';')}` }
+    }
+  }
+  return hits.length === 0 ? { passed: true, evidence: '0 hits (F2 cross-checked)' } : { passed: false, evidence: hits.slice(0, 3).join(';') }
 }
 
 // ci：GitHub Actions 最新 run 状态（需要 GH_TOKEN env）
